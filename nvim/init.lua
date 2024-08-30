@@ -20,7 +20,7 @@ vim.g.neovide_padding_bottom = 0
 vim.g.neovide_padding_right = 0
 vim.g.neovide_padding_left = 0
 
-vim.api.nvim_set_hl(0, 'CmpCursor', {bg = '#9370DB', fg = '#00FF7F', bold = true})
+vim.api.nvim_set_hl(0, 'CmpCursor', {bg = None, fg = '#9370DB', bold = true})
 vim.api.nvim_set_hl(0, 'CmpNormal', {bg = None, fg = '#9370DB'})
 vim.api.nvim_set_hl(0, 'CmpBorder', {bg = None, fg = '#00FF7F'})
 
