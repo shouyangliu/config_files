@@ -17,7 +17,7 @@ return {
             Constructor = "",
             Enum = "",
             EnumMember = "",
-            Event = " ",
+            Event = "",
             Field = "",
             File = "",
             Folder = "",
@@ -50,8 +50,16 @@ return {
               end,
             },
             window = {
-              completion = cmp.config.window.bordered(),
-              documentation = cmp.config.window.bordered(),
+              completion = cmp.config.window.bordered({
+                border = "rounded",
+                winhighlight = "Normal:CmpNormal,CursorLine:CmpCursor,FloatBorder:CmpBorder,Search:None",
+              }),
+              documentation = cmp.config.window.bordered({
+                border = 'rounded',
+                winhighlight = "Normal:None,CursorLine:CmpCursor,FloatBorder:None,Search:None",
+              }),
+              col_offset = -3,
+              side_padding = 0,
             },
             mapping = cmp.mapping.preset.insert({
                 ["<Tab>"] = cmp.mapping.select_next_item(),

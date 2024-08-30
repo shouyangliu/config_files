@@ -20,6 +20,10 @@ vim.g.neovide_padding_bottom = 0
 vim.g.neovide_padding_right = 0
 vim.g.neovide_padding_left = 0
 
+vim.api.nvim_set_hl(0, 'CmpCursor', {bg = '#9370DB', fg = '#00FF7F', bold = true})
+vim.api.nvim_set_hl(0, 'CmpNormal', {bg = None, fg = '#9370DB'})
+vim.api.nvim_set_hl(0, 'CmpBorder', {bg = None, fg = '#00FF7F'})
+
 -- helper function for transparency formatting
 local alpha = function()
   return string.format("%x", math.floor(255 * vim.g.transparency or 0.8))
@@ -43,4 +47,3 @@ vim.g.neovide_refresh_rate_idle = 5
 vim.g.neovide_input_ime = true
 --动画
 vim.g.neovide_cursor_vfx_mode = "pixiedust"
-
