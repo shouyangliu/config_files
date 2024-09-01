@@ -1728,12 +1728,12 @@ runautostart(void)
 
 	free(pathpfx);
 	free(path);
-    system("picom --config ~/.config/picom.conf -b");
+    system("picom --experimental --config ~/.config/picom.conf -Cb");
     system("feh --randomize --bg-fill ~/Downloads/wallpaper/");
     // system("dwmblocks &");
-    system("/home/yl/my_config/config_files/dwm_own/bar/dwm_bar.sh &");
+    system("/home/y/config/config_files/dwm/bar/dwm_bar.sh &");
     system("fcitx");
-    system("xrandr --output HDMI-0 --auto --left-of DP-0 --rotate left");
+    // system("xrandr --output HDMI-0 --auto --left-of DP-0 --rotate left");
 }
 
 void
