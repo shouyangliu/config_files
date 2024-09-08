@@ -89,7 +89,7 @@ static const char *termcmd[] = {"st", NULL};
 static const char *roficmd[] = {
     "/home/y/.config/rofi/launchers/type-5/launcher.sh", NULL};
 static const char *changebgcmd[] = {"feh", "--randomize", "--bg-fill",
-                                    "/home/yl/Downloads/wallpaper/", NULL};
+                                    "/home/y/Downloads/wallpaper/", NULL};
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
 
 static const Key keys[] = {
