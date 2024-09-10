@@ -2,42 +2,39 @@ return
 {
     'mfussenegger/nvim-dap',
     config = function()
-        local dap = require("dap")
+        local dap = require('dap')
+        dap.adapters.cppdbg = {
+            id = "cppdbg",
+            type = 'executable',
+            command = "~/.local/share/nvim/mason/bin/OpenDebugAD7",
+        }
         dap.configurations.cpp = {
           {
-            name = "Launch",
-            type = "gdb",
-            request = "launch",
+            name = 'Launch',
+            type = 'cppdbg',
+            request = 'launch',
             program = function()
               return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
             end,
-            cwd = "${workspaceFolder}",
-            stopAtBeginningOfMainSubprogram = false,
-          },
-          {
-            name = "Select and attach to process",
-            type = "gdb",
-            request = "attach",
-            program = function()
-               return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-            end,
-            pid = function()
-               local name = vim.fn.input('Executable name (filter): ')
-               return require("dap.utils").pick_process({ filter = name })
-            end,
-            cwd = '${workspaceFolder}'
-          },
-          {
-            name = 'Attach to gdbserver :1234',
-            type = 'gdb',
-            request = 'attach',
-            target = 'localhost:1234',
-            program = function()
-               return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
-            end,
-            cwd = '${workspaceFolder}'
+            cwd = '${workspaceFolder}',
+            stopAtEntry = true,
+            args = {},
+        
+            -- 💀
+            -- if you change `runInTerminal` to true, you might need to change the yama/ptrace_scope setting:
+            --
+            --    echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope
+            --
+            -- Otherwise you might get the following error:
+            --
+            --    Error on launch: Failed to attach to the target process
+            --
+            -- But you should be aware of the implications:
+            -- https://www.kernel.org/doc/html/latest/admin-guide/LSM/Yama.html
+            -- runInTerminal = false,
           },
         }
+          dap.configurations.c = dap.configurations.cpp
     end
     --config = function()
     --    require('nvim-dap').setup()
