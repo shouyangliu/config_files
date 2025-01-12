@@ -5,22 +5,22 @@ sudo apt install neovim
 sudo apt install ripgrep
 
 sudo apt install git
-git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+# git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 
 #sudo apt install clangd-12
 #sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-12 100
 #pip3 isntall cmake-language-server
-sudo apt install npm
-sudo npm install -g n
-source ~/.bashrc
-sudo n stable
-#sudo npm i -g pyright
-sudo apt install xclip #neovim 使用系统剪切板
+## sudo apt install npm
+## sudo npm install -g n
+## source ~/.bashrc
+## sudo n stable
+## #sudo npm i -g pyright
+## sudo apt install xclip #neovim 使用系统剪切板
 
 install_path=~/.local/share/nvim
 mkdir $install_path/lazy/
 lazy_path=$install_path/lazy
-# git clone https://gitee.com/dinary/lazy.nvim.git $lazy_path/lazy.nvim
+git clone https://github.com/folke/lazy.nvim.git $lazy_path/lazy.nvim
 # git clone https://gitee.com/shouyangliu/barbecue.nvim.git $lazy_path/barbecue
 # git clone https://gitee.com/shouyangliu/bufferline.nvim.git $lazy_path/bufferline.nvim
 # git clone https://gitee.com/mirror_jedsek/cmp-buffer.git $lazy_path/cmp-buffer
