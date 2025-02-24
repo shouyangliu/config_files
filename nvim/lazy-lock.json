@@ -32,7 +32,6 @@
   "plenary.nvim": { "branch": "master", "commit": "663246936325062427597964d81d30eaa42ab1e4" },
   "satellite.nvim": { "branch": "main", "commit": "99610b77fe2e047d2e55d70a256bcf63953eb6d7" },
   "startup.nvim": { "branch": "master", "commit": "81222a9956148eebf10363726d8bccf8793aa41f" },
-  "tabnine-nvim": { "branch": "master", "commit": "2a11f69da0140fcf1a32afa9de790dce930ebd66" },
   "telescope-file-browser.nvim": { "branch": "master", "commit": "c5a14e0550699a7db575805cdb9ddc969ba0f1f5" },
   "telescope.nvim": { "branch": "master", "commit": "0902bb39ebaf76e655addc65130eb79b29abe6d2" }
 }
