@@ -33,8 +33,6 @@ return {
             "clangd",
             "pyright",
             "cmake-language-server",
-            "jsonls",
-            "html",
             "yamlls",
             "bashls",
           },
