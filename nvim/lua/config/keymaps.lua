@@ -63,3 +63,20 @@ map("n", "<A-p>", ":bp<CR>", opt)
 map("n", "GT", ":b#<CR>", opt)
 map("n", "b", ":b", opt)
 map("n", "bd", ":bd<CR>", opt)
+
+vim.api.nvim_create_autocmd('LspAttach', {
+    group = vim.api.nvim_create_augroup('lsp-attach', {clear = true}),
+    callback = function(event)
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', 'gr', vim.lsp.buf.rename, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', ']d', vim.diagnostic.get_next, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', ']D', vim.diagnostic.get_prev, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+        vim.keymap.set('n', '<space>f', vim.lsp.buf.format, {buffer = event.buf, desc = 'Lsp: Goto Definiton'})
+    end,
+})
+
