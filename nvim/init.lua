@@ -2,6 +2,10 @@ require("config.basic_setting")
 require("config.keymaps")
 require("config.lazy")
 
+vim.lsp.enable 'lua_ls'
+vim.lsp.enable 'clangd'
+vim.lsp.enable 'pyright'
+
 --background
 --vim.cmd "colorscheme catppuccin-mocha" --theme
 --vim.cmd "colorscheme tokyonight" --theme
