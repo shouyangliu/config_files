@@ -42,6 +42,7 @@ vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
 vim.o.foldcolumn = '1'
 vim.o.foldlevel = 99
 vim.o.foldlevelstart=99 -- 默认不折叠
+vim.opt.mouse='a'
 -- vim.o.foldenable = false
 
 --剪贴板
