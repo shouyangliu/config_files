@@ -3,9 +3,9 @@ require("config.keymaps")
 require("config.lazy")
 
 --background
---vim.cmd "colorscheme catppuccin-mocha" --theme
---vim.cmd "colorscheme tokyonight" --theme
-vim.cmd[[colorscheme neon]]
+vim.cmd "colorscheme dracula-soft" --theme
+-- vim.cmd "colorscheme tokyonight" --theme
+-- vim.cmd[[colorscheme neon]]
 vim.opt.showtabline=2
 vim.opt.laststatus=3
 vim.opt.termguicolors = true

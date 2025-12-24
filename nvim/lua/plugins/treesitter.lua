@@ -19,12 +19,12 @@ return {
             -- parser_install_dir = "/some/path/to/store/parsers", -- Remember to run vim.opt.runtimepath:append("/some/path/to/store/parsers")!
 
             highlight = {
-              enable = true,
+              enable = false,
               additional_vim_regex_highlighting = false,
             },
             rainbow = {
-                enable = true,
-                extened_mode = true,
+                enable = false,
+                extened_mode = false,
                 max_file_lines = nil,
                 colors = {
                     "#cc241d",
