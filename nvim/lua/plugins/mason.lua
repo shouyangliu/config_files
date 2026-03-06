@@ -1,5 +1,7 @@
 return {
     "williamboman/mason.nvim",
-    event = {'BufReadPost', 'BufNewFile', 'VimEnter'},
-    opts = {}
+    cmd = "Mason",
+    config = function()
+        require("mason").setup()
+    end,
 }

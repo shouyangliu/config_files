@@ -1,10 +1,13 @@
 return {
-     'romgrk/barbar.nvim',
+    "romgrk/barbar.nvim",
     dependencies = {
-      'lewis6991/gitsigns.nvim', -- OPTIONAL: for git status
-      'nvim-tree/nvim-web-devicons', -- OPTIONAL: for file icons
+        "lewis6991/gitsigns.nvim",
+        "nvim-tree/nvim-web-devicons",
     },
     config = function()
-        require("barbar").setup{}
-    end
+        require("barbar").setup({
+            icons = { buffer_index = true },
+            insert_at_start = true,
+        })
+    end,
 }

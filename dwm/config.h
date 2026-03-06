@@ -85,9 +85,8 @@ static char dmenumon[2] =
 static const char *dmenucmd[] = {
     "dmenu_run", "-m",      dmenumon, "-fn",    dmenufont, "-nb",     col_gray1,
     "-nf",       col_gray3, "-sb",    col_cyan, "-sf",     col_gray4, NULL};
-static const char *termcmd[] = {"st", NULL};
-static const char *roficmd[] = {
-    "rofi", "-show", "drun", "-theme", "~/config_files/rofi_theme/themes/rounded-green-dark.rasi", NULL};
+static const char *termcmd[] = {"wezterm", "start", NULL};
+static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
 static const char *changebgcmd[] = {"feh", "--randomize", "--bg-fill",
                                     "/home/y/Downloads/wallpaper/", NULL};
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};

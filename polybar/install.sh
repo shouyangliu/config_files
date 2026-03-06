@@ -1,4 +1,7 @@
 #!/bin/bash
-git clone --depth=1 https://github.com/adi1090x/polybar-themes.git
-cd polybar-themes
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+cd "$SCRIPT_DIR/polybar-themes-master"
 sudo chmod +x setup.sh
+./setup.sh

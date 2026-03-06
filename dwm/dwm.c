@@ -1728,7 +1728,8 @@ runautostart(void)
 
 	free(pathpfx);
 	free(path);
-    system("picom --experimental --config ~/config_files/picom_files/picom.conf &");
+    system("fcitx5-remote &");
+    system("picom &");
     system("feh --randomize --bg-fill ~/Downloads/wallpaper/");
     // system("dwmblocks &");
     system("~/config/config_files/dwm/bar/dwm_bar.sh &");
