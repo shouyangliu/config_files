@@ -3,16 +3,25 @@ vim.g.mapleader = " "
 local map = vim.api.nvim_set_keymap
 local opt = { noremap = true, silent = true }
 
-map("i", "<A-'>", "''<Left>", opt)
-map("i", '<A-">', '""<Left>', opt)
-map("i", "<A-(>", "()<Left>", opt)
-map("i", "<A-[>", "[]<Left>", opt)
-map("i", "<A-{>", "{}<Left>", opt)
+vim.keymap.set("i", "(", "()<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", "[", "[]<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", "{", "{}<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", "<", "<><Left>", { noremap = true, silent = true })
+
+vim.keymap.set("i", "C-(", "(", { noremap = true, silent = true })
+vim.keymap.set("i", "C-[", "[", { noremap = true, silent = true })
+vim.keymap.set("i", "C-{", "{", { noremap = true, silent = true })
+vim.keymap.set("i", "C-<", "<", { noremap = true, silent = true })
+vim.keymap.set("i", ",'", "''<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", ',"', '""<Left>', { noremap = true, silent = true })
 
 map("n", "jk", "<Esc>", opt)
 map("i", "jk", "<Esc>", opt)
 
 map("n", "<leader>w", ":w<CR>", opt)
+map("n", "ww", ":w<CR>", opt)
+map("n", "wq", ":wq<CR>", opt)
+map("n", "qq", ":q<CR>", opt)
 map("n", "<leader>q", ":q<CR>", opt)
 
 map("n", "<A-t>", ":NvimTreeToggle<CR>", opt)

@@ -3,22 +3,28 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 DOTFILES_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-echo "编译安装 dwm..."
+echo "==> Installing dependencies..."
+if command -v apt-get &> /dev/null; then
+    sudo apt-get install -y libx11-dev libxinerama-dev libfontconfig-dev libxft-dev
+elif command -v pacman &> /dev/null; then
+    sudo pacman -S --noconfirm libx11 libxinerama fontconfig libxft
+fi
 
+echo "==> Building dwmblocks..."
+cd "$DOTFILES_DIR/dwmblocks"
+make clean
+make
+sudo cp -f dwmblocks /usr/local/bin/
+sudo chmod 755 /usr/local/bin/dwmblocks
+echo "dwmblocks installed."
+
+echo "==> Building dwm..."
 cd "$DOTFILES_DIR/dwm"
+make clean
+make
+sudo make install
+sudo cp dwm.desktop /usr/share/xsessions/ 2>/dev/null || true
+echo "dwm installed."
 
-if [ ! -f config.h ]; then
-    echo "config.h 不存在"
-    exit 1
-fi
-
-sudo make clean 2>/dev/null || true
-
-if sudo make; then
-    sudo make install
-    sudo cp dwm.desktop /usr/share/xsessions/ 2>/dev/null || true
-    echo "dwm 编译安装成功"
-else
-    echo "dwm 编译失败"
-    exit 1
-fi
+echo ""
+echo "==> Done! Please restart your X session."

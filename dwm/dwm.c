@@ -254,6 +254,7 @@ static unsigned int getsystraywidth();
 static void removesystrayicon(Client *i);
 static void resizebarwin(Monitor *m);
 static void resizerequest(XEvent *e);
+static int solitary(Client *c);
 static Monitor *systraytomon(Monitor *m);
 static void tag(const Arg *arg);
 static void updatesystray(void);
@@ -903,7 +904,7 @@ drawbar(Monitor *m)
 		if (m->sel) {
 			drw_setscheme(drw, scheme[m == selmon ? SchemeSel : SchemeNorm]);
 			drw_text(drw, x, 0, w, bh, lrpad / 2, m->sel->name, 0);
-			if (m->sel->isfloating)
+			if (m->sel && m->sel->isfloating)
 				drw_rect(drw, x + boxs, boxs, boxw, boxw, m->sel->isfixed, 0);
 		} else {
 			drw_setscheme(drw, scheme[SchemeNorm]);
@@ -1265,7 +1266,6 @@ manage(Window w, XWindowAttributes *wa)
 
 	wc.border_width = c->bw;
 	XConfigureWindow(dpy, w, CWBorderWidth, &wc);
-	XSetWindowBorder(dpy, w, scheme[SchemeNorm][ColBorder].pixel);
 	configure(c); /* propagates border_width, if size doesn't change */
 	updatewindowtype(c);
 	updatesizehints(c);
@@ -1334,8 +1334,15 @@ monocle(Monitor *m)
 			n++;
 	if (n > 0) /* override layout symbol */
 		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
-	for (c = nexttiled(m->clients); c; c = nexttiled(c->next))
+	for (c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
+		if (c == m->sel) {
+			c->bw = borderpx;
+			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
+		} else {
+			c->bw = 0;
+		}
 		resize(c, m->wx, m->wy, m->ww - 2 * c->bw, m->wh - 2 * c->bw, 0);
+	}
 }
 
 void
@@ -1728,12 +1735,16 @@ runautostart(void)
 
 	free(pathpfx);
 	free(path);
-    system("fcitx5-remote &");
-    system("picom &");
+    system("fcitx5 -d &");
+    if (fork() == 0) {
+        execlp("picom", "picom", "--daemon", NULL);
+        _exit(1);
+    }
     system("feh --randomize --bg-fill ~/Downloads/wallpaper/");
-    // system("dwmblocks &");
-    system("~/config/config_files/dwm/bar/dwm_bar.sh &");
-    // system("xrandr --output HDMI-0 --auto --left-of DP-0 --rotate left");
+    if (fork() == 0) {
+        execlp("dwmblocks", "dwmblocks", NULL);
+        _exit(1);
+    }
 }
 
 void
@@ -2206,7 +2217,8 @@ unfocus(Client *c, int setfocus)
 	if (!c)
 		return;
 	grabbuttons(c, 0);
-	XSetWindowBorder(dpy, c->win, scheme[SchemeNorm][ColBorder].pixel);
+	c->bw = 0;
+	XConfigureWindow(dpy, c->win, CWBorderWidth, &(XWindowChanges){.border_width = 0});
 	if (setfocus) {
 		XSetInputFocus(dpy, root, RevertToPointerRoot, CurrentTime);
 		XDeleteProperty(dpy, root, netatom[NetActiveWindow]);
@@ -2874,6 +2886,11 @@ zoom(const Arg *arg)
 int
 main(int argc, char *argv[])
 {
+	putenv("GTK_IM_MODULE=fcitx5");
+	putenv("QT_IM_MODULE=fcitx5");
+	putenv("XMODIFIERS=@im=fcitx5");
+	putenv("SDL_IM_MODULE=fcitx5");
+
 	if (argc == 2 && !strcmp("-v", argv[1]))
 		die("dwm-"VERSION);
 	else if (argc != 1)

@@ -15,13 +15,12 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
-sudo apt install -y ripgrep git xclip
+sudo apt install -y ripgrep git xclip curl
 
-if ! command -v snap &> /dev/null; then
-    sudo apt install -y snapd
-fi
-
-sudo snap install nvim --channel=latest/stable --classic
+sudo apt install -y software-properties-common
+sudo add-apt-repository ppa:neovim-ppa/unstable -y
+sudo apt update
+sudo apt install -y neovim
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -34,7 +33,7 @@ fi
 
 if [ "$INSTALL_PLUGINS" = true ]; then
     echo "安装所有插件..."
-    nvim --headless +Lazy! sync 2>/dev/null || echo "插件安装可能需要更多时间，请手动运行 nvim"
+    nvim +'Lazy! sync' +qa 2>/dev/null || echo "插件安装可能需要更多时间，请手动运行 nvim"
 else
     echo "仅安装 lazy.nvim，首次运行 nvim 时会自动安装插件"
 fi

@@ -5,7 +5,15 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
-config.color_scheme = 'Catppuccin Mocha'
+config.default_prog = {'/bin/bash'}
+
+config.set_environment_variables = {
+  GTK_IM_MODULE = 'fcitx5',
+  QT_IM_MODULE = 'fcitx5',
+  XMODIFIERS = '@im=fcitx5',
+}
+
+config.color_scheme = 'Dracula'
 
 config.font = wezterm.font_with_fallback {
   'JetBrains Mono',
@@ -24,17 +32,44 @@ config.window_padding = {
   bottom = 8,
 }
 
-config.window_background_opacity = 0.9
+config.window_background_opacity = 0.85
+config.window_decorations = "RESIZE"
 
 config.window_decorations = "RESIZE"
 config.window_close_confirmation = 'NeverPrompt'
 config.adjust_window_size_when_changing_font_size = false
 
 config.enable_tab_bar = true
-config.hide_tab_bar_if_only_one_tab = false
-config.use_fancy_tab_bar = false
-config.tab_bar_at_bottom = false
-config.tab_max_width = 32
+config.hide_tab_bar_if_only_one_tab = true
+config.use_fancy_tab_bar = true
+config.tab_bar_at_bottom = true
+config.tab_max_width = 24
+config.status_update_interval = 1
+
+wezterm.on('update-status', function(window, pane)
+  local cwd = pane:get_current_working_dir()
+  local basename = cwd and require('wezterm.path').basename(cwd) or ''
+  local user = os.getenv('USER') or 'user'
+  local hostname = require('wezterm.info').hostname()
+  local date = os.date('%Y-%m-%d %H:%M')
+  
+  local left = string.format(' %s@%s:%s ', user, hostname, basename)
+  local right = string.format(' %s ', date)
+  
+  window:set_left_status(wezterm.format {
+    { Foreground = { Color = '#bd93f9' } },
+    { Text = '▋' },
+    { Foreground = { Color = '#f8f8f2' } },
+    { Text = left },
+  })
+  
+  window:set_right_status(wezterm.format {
+    { Foreground = { Color = '#f8f8f2' } },
+    { Text = right },
+    { Foreground = { Color = '#bd93f9' } },
+    { Text = ' ▌' },
+  })
+end)
 
 config.enable_scroll_bar = false
 
@@ -59,6 +94,16 @@ config.keys = {
   { key = 'J', mods = 'LEADER|CTRL', action = wezterm.action.AdjustPaneSize { 'Down', 5 } },
   { key = 'K', mods = 'LEADER|CTRL', action = wezterm.action.AdjustPaneSize { 'Up', 5 } },
   { key = 'L', mods = 'LEADER|CTRL', action = wezterm.action.AdjustPaneSize { 'Right', 5 } },
+
+  { key = '1', mods = 'LEADER', action = wezterm.action.ActivateTab(0) },
+  { key = '2', mods = 'LEADER', action = wezterm.action.ActivateTab(1) },
+  { key = '3', mods = 'LEADER', action = wezterm.action.ActivateTab(2) },
+  { key = '4', mods = 'LEADER', action = wezterm.action.ActivateTab(3) },
+  { key = '5', mods = 'LEADER', action = wezterm.action.ActivateTab(4) },
+  { key = '6', mods = 'LEADER', action = wezterm.action.ActivateTab(5) },
+  { key = '7', mods = 'LEADER', action = wezterm.action.ActivateTab(6) },
+  { key = '8', mods = 'LEADER', action = wezterm.action.ActivateTab(7) },
+  { key = '9', mods = 'LEADER', action = wezterm.action.ActivateTab(8) },
 
   { key = 'Tab', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(1) },
   { key = 'Tab', mods = 'CTRL|SHIFT', action = wezterm.action.ActivateTabRelative(-1) },
@@ -89,14 +134,23 @@ config.mouse_bindings = {
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
 
 wezterm.on('format-tab-title', function(tab, tabs, panes, config, hover, max_width)
-  local title = tab.tab_index + 1 .. ': '
+  local index = tab.tab_index + 1 .. ': '
+  local pane_title = tab.active_pane.title or ''
   if tab.is_active then
-    title = '● ' .. title
+    return {
+      { Background = { Color = '#282a36' } },
+      { Text = '● ' .. index },
+      { Foreground = { Color = '#50fa7b' } },
+      { Text = pane_title },
+    }
   else
-    title = '○ ' .. title
+    return {
+      { Background = { Color = '#44475a' } },
+      { Text = '○ ' .. index },
+      { Foreground = { Color = '#8be9fd' } },
+      { Text = pane_title },
+    }
   end
-  title = title .. (tab.active_pane.title or '')
-  return title
 end)
 
 wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)

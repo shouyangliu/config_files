@@ -2,11 +2,6 @@ require("config.basic_setting")
 require("config.keymaps")
 require("config.lazy")
 
-vim.lsp.enable "lua_ls"
-vim.lsp.enable "clangd"
-vim.lsp.enable "pyright"
-vim.lsp.enable "cmake"
-
 vim.cmd("colorscheme neon")
 vim.opt.showtabline = 2
 vim.opt.laststatus = 3
