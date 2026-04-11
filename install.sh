@@ -2,6 +2,16 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+echo "==> Creating symlinks..."
+mkdir -p ~/.config
+ln -sf "$SCRIPT_DIR/nvim" ~/.config/nvim
+ln -sf "$SCRIPT_DIR/tmux/.tmux.conf" ~/.tmux.conf
+ln -sf "$SCRIPT_DIR/picom/picom.conf" ~/.picom.conf
+ln -sf "$SCRIPT_DIR/kitty" ~/.config/kitty
+ln -sf "$SCRIPT_DIR/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
+ln -sf "$SCRIPT_DIR/i3/config" ~/.config/i3/config
+
+echo "==> Installing fonts..."
 sudo cp -r "$SCRIPT_DIR/nerdfont/ComicShannsMono/" /usr/share/fonts/
 fc-cache -fv
 
@@ -17,6 +27,7 @@ cargo install eza
 cd "$SCRIPT_DIR/bash" && ./install.sh
 cd "$SCRIPT_DIR/st" && sudo make clean install
 cd "$SCRIPT_DIR/dwmblocks" && sudo make clean install
+cd "$SCRIPT_DIR/slstatus" && sudo make clean install
 cd "$SCRIPT_DIR/nvim" && ./install.sh
 sudo apt install -y rofi
 cd "$SCRIPT_DIR/rofi_theme" && ./install.sh

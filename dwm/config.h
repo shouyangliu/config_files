@@ -94,7 +94,7 @@ static const char *dmenucmd[] = {
 static const char *termcmd[] = {"wezterm", "start", "--always-new-process", NULL};
 static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
 static const char *changebgcmd[] = {"feh", "--randomize", "--bg-fill",
-                                    "/home/y/Downloads/wallpaper/", NULL};
+                                    "$HOME/config_files/wallpaper/", NULL};
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
 
 static const Key keys[] = {

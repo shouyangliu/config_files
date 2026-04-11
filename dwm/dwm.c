@@ -1740,9 +1740,9 @@ runautostart(void)
         execlp("picom", "picom", "--daemon", NULL);
         _exit(1);
     }
-    system("feh --randomize --bg-fill ~/Downloads/wallpaper/");
+    system("feh --randomize --bg-fill $HOME/config_files/wallpaper/");
     if (fork() == 0) {
-        execlp("dwmblocks", "dwmblocks", NULL);
+        execlp("slstatus", "slstatus", NULL);
         _exit(1);
     }
 }

@@ -7,24 +7,26 @@ green="#9ece6a"
 red="#f7768e"
 yellow="#e0af68"
 purple="#bb9af7"
+cyan="#7dcfff"
+orange="#ff9e64"
 
 dwm_date () {
-    printf "^b$blue^ [%s]" "$(date +"%H:%M")"
+    printf "^b$orange^ ⏰ %s" "$(date +"%H:%M")"
 }
 
 dwm_battery () {
     CHARGE=$(cat /sys/class/power_supply/BAT1/capacity 2>/dev/null)
     STATUS=$(cat /sys/class/power_supply/BAT1/status 2>/dev/null)
     if [ -z "$CHARGE" ]; then
-        printf "^b$grey^ 󰁹 --"
+        printf "^b$grey^ 🔋 --"
         return
     fi
     if [ "$STATUS" = "Charging" ]; then
-        printf "^b$green^ 󰂄 %s%%" "$CHARGE"
+        printf "^b$green^ 🔌 %s%%" "$CHARGE"
     elif [ "$CHARGE" -le 20 ]; then
-        printf "^b$red^ 󰁺 %s%%" "$CHARGE"
+        printf "^b$red^ 🔋 %s%%" "$CHARGE"
     else
-        printf "^b$yellow^ 󰁹 %s%%" "$CHARGE"
+        printf "^b$cyan^ 🔋 %s%%" "$CHARGE"
     fi
 }
 
@@ -38,19 +40,22 @@ dwm_cpu(){
     if [ "$cpu" -lt 0 ]; then
         cpu=0
     fi
-    printf "^b$purple^ [CPU %d%%]" "$cpu"
+    printf "^b$purple^ 💻 %d%%" "$cpu"
 }
 
 print_mem(){
     memfree=$(($(grep -m1 'MemAvailable:' /proc/meminfo | awk '{print $2}') / 1024))
     memtotal=$(($(grep -m1 'MemTotal:' /proc/meminfo | awk '{print $2}') / 1024 ))
     memused=$((memtotal - memfree))
-    printf "^b$blue^ [MEM %dM]" "$memused"
+    printf "^b$blue^ 🧠 %dM" "$memused"
+}
+
+dwm_separator () {
+    printf "^c$grey^|"
 }
 
 while true
 do
-    xsetroot -name "$(print_mem)$(dwm_cpu)$(dwm_battery)$(dwm_date)"
+    xsetroot -name "$(print_mem)$(dwm_separator)$(dwm_cpu)$(dwm_separator)$(dwm_battery)$(dwm_separator)$(dwm_date)"
     sleep 2
 done
-
