@@ -9,7 +9,7 @@ yellow="#e0af68"
 purple="#bb9af7"
 
 dwm_date () {
-    printf "^b$blue^ 󰥔 %s" "$(date +"%H:%M")"
+    printf "^b$blue^ [%s]" "$(date +"%H:%M")"
 }
 
 dwm_battery () {
@@ -38,14 +38,14 @@ dwm_cpu(){
     if [ "$cpu" -lt 0 ]; then
         cpu=0
     fi
-    printf "^b$purple^ 󰧨 %d%%" "$cpu"
+    printf "^b$purple^ [CPU %d%%]" "$cpu"
 }
 
 print_mem(){
     memfree=$(($(grep -m1 'MemAvailable:' /proc/meminfo | awk '{print $2}') / 1024))
     memtotal=$(($(grep -m1 'MemTotal:' /proc/meminfo | awk '{print $2}') / 1024 ))
     memused=$((memtotal - memfree))
-    printf "^b$blue^ 󰍛 %dM" "$memused"
+    printf "^b$blue^ [MEM %dM]" "$memused"
 }
 
 while true

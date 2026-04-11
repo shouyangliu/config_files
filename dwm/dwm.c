@@ -1336,7 +1336,7 @@ monocle(Monitor *m)
 		snprintf(m->ltsymbol, sizeof m->ltsymbol, "[%d]", n);
 	for (c = nexttiled(m->clients); c; c = nexttiled(c->next)) {
 		if (c == m->sel) {
-			c->bw = borderpx;
+			c->bw = borderpx_focused;
 			XSetWindowBorder(dpy, c->win, scheme[SchemeSel][ColBorder].pixel);
 		} else {
 			c->bw = 0;

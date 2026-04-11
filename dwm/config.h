@@ -1,7 +1,8 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx = 2; /* border pixel of windows */
+static const unsigned int borderpx = 4; /* border pixel of windows */
+static const unsigned int borderpx_focused = 6; /* border pixel for focused window */
 static const unsigned int cornerpx = 0;
 static const Gap default_gap = {.isgap = 1, .realgap = 10, .gappx = 10};
 static const unsigned int snap = 32; /* snap pixel */
@@ -35,7 +36,7 @@ static const char col_teal[] = "#73daca";      /* teal - info */
 static const char col_orange[] = "#ff9e64";    /* orange - accent */
 static const char *colors[][3] = {
     /*               fg         bg         border   */
-    [SchemeNorm] = {col_gray3, col_gray1, col_gray2},
+    [SchemeNorm] = {col_gray3, col_gray1, col_gray1},
     [SchemeSel] = {col_gray4, col_cyan, col_green},
 };
 
