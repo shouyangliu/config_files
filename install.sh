@@ -11,6 +11,9 @@ cd "$SCRIPT_DIR/dwm" && sudo make clean install
 sudo cp "$SCRIPT_DIR/dwm.desktop" /usr/share/xsessions/
 cd "$SCRIPT_DIR/wezterm" && ./install.sh
 cd "$SCRIPT_DIR/kitty" && ./install.sh
+
+cargo install eza
+
 cd "$SCRIPT_DIR/bash" && ./install.sh
 cd "$SCRIPT_DIR/st" && sudo make clean install
 cd "$SCRIPT_DIR/dwmblocks" && sudo make clean install
