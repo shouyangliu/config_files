@@ -9,28 +9,43 @@ yellow="#e0af68"
 purple="#bb9af7"
 cyan="#7dcfff"
 orange="#ff9e64"
+pink="#bb9af7"
 
-dwm_date () {
-    printf "^b$orange^ ⏰ %s" "$(date +"%H:%M")"
+dwm_wifi() {
+    ssid=$(iwgetid -r 2>/dev/null)
+    if [ -z "$ssid" ]; then
+        printf "^c$grey^^b$grey^ 睊 --"
+    else
+        signal=$(cat /proc/net/wireless 2>/dev/null | awk 'NR==3 {print int($3)}')
+        if [ -z "$signal" ]; then
+            printf "^c$cyan^^b$blue^ 󰤨 %s" "$ssid"
+        else
+            printf "^c$black^^b$cyan^ 󰤨 %s" "$ssid"
+        fi
+    fi
 }
 
-dwm_battery () {
+dwm_date() {
+    printf "  ^c$black^^b$orange^%s " "$(date +"%Y-%m-%d %H:%M")"
+}
+
+dwm_battery() {
     CHARGE=$(cat /sys/class/power_supply/BAT1/capacity 2>/dev/null)
     STATUS=$(cat /sys/class/power_supply/BAT1/status 2>/dev/null)
     if [ -z "$CHARGE" ]; then
-        printf "^b$grey^ 🔋 --"
+        printf "^c$grey^^b$grey^ --"
         return
     fi
     if [ "$STATUS" = "Charging" ]; then
-        printf "^b$green^ 🔌 %s%%" "$CHARGE"
+        printf "^c$black^^b$green^ 󰂄 %s%%" "$CHARGE"
     elif [ "$CHARGE" -le 20 ]; then
-        printf "^b$red^ 🔋 %s%%" "$CHARGE"
+        printf "^c$black^^b$red^ 󰁺 %s%%" "$CHARGE"
     else
-        printf "^b$cyan^ 🔋 %s%%" "$CHARGE"
+        printf "^c$black^^b$cyan^ 󰁽 %s%%" "$CHARGE"
     fi
 }
 
-dwm_cpu(){
+dwm_cpu() {
     read cpu a b c previdle rest < /proc/stat
     prevtotal=$((a+b+c+previdle))
     sleep 0.5
@@ -40,22 +55,34 @@ dwm_cpu(){
     if [ "$cpu" -lt 0 ]; then
         cpu=0
     fi
-    printf "^b$purple^ 💻 %d%%" "$cpu"
+    printf "^c$black^^b$purple^ 󰘚 %d%%" "$cpu"
 }
 
-print_mem(){
+dwm_mem() {
     memfree=$(($(grep -m1 'MemAvailable:' /proc/meminfo | awk '{print $2}') / 1024))
-    memtotal=$(($(grep -m1 'MemTotal:' /proc/meminfo | awk '{print $2}') / 1024 ))
+    memtotal=$(($(grep -m1 'MemTotal:' /proc/meminfo | awk '{print $2}') / 1024))
     memused=$((memtotal - memfree))
-    printf "^b$blue^ 🧠 %dM" "$memused"
+    printf "^c$black^^b$green^ 󰆼 %dM" "$memused"
 }
 
-dwm_separator () {
-    printf "^c$grey^|"
+dwm_ip() {
+    ip=$(hostname -I 2>/dev/null | awk '{print $1}')
+    if [ -z "$ip" ]; then
+        printf "^c$grey^^b$grey^ --"
+    else
+        printf "^c$black^^b$yellow^ 󰈟 %s" "$ip"
+    fi
 }
 
-while true
-do
-    xsetroot -name "$(print_mem)$(dwm_separator)$(dwm_cpu)$(dwm_separator)$(dwm_battery)$(dwm_separator)$(dwm_date)"
+dwm_separator() {
+    printf " "
+}
+
+dwm_emoji() {
+    printf "^c$black^^b$yellow^ 🐶 "
+}
+
+while true; do
+    xsetroot -name "$(dwm_wifi)$(dwm_separator)$(dwm_ip)$(dwm_separator)$(dwm_mem)$(dwm_separator)$(dwm_cpu)$(dwm_separator)$(dwm_battery)$(dwm_separator)$(dwm_date)$(dwm_emoji)"
     sleep 2
 done

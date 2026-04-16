@@ -1,7 +1,16 @@
 #!/bin/bash
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+echo "==> Installing polybar..."
 
-cd "$SCRIPT_DIR/polybar-themes-master"
-sudo chmod +x setup.sh
-./setup.sh
+# Check if polybar is already installed
+if command -v polybar &> /dev/null; then
+    echo "polybar already installed"
+else
+    echo "polybar not found, you may need to build from source"
+    echo "See: https://github.com/polybar/polybar"
+fi
+
+# Make scripts executable
+chmod +x "$HOME/.config/polybar/scripts/"*.sh 2>/dev/null || true
+
+echo "==> Polybar setup complete"

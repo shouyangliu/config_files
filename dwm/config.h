@@ -94,8 +94,9 @@ static const char *dmenucmd[] = {
 static const char *termcmd[] = {"wezterm", "start", "--always-new-process", NULL};
 static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
 static const char *changebgcmd[] = {"feh", "--randomize", "--bg-fill",
-                                    "$HOME/config_files/wallpaper/", NULL};
+                                    "~/.config/wallpaper/", NULL};
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
+static const char *polybarcmd[] = {"/bin/bash", "-c", "/home/y/config_files/polybar/launch.sh", NULL};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
@@ -104,6 +105,7 @@ static const Key keys[] = {
     {MODKEY, XK_p, spawn, {.v = roficmd}},
     {MODKEY, XK_w, spawn, {.v = changebgcmd}},
     {MODKEY, XK_q, spawn, {.v = flameshotcmd}},
+    {MODKEY, XK_r, spawn, {.v = polybarcmd}},
     {MODKEY, XK_j, focusstack, {.i = +1}},
     {MODKEY, XK_k, focusstack, {.i = -1}},
     {MODKEY, XK_h, setmfact, {.f = -0.05}},

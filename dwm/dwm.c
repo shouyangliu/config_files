@@ -1735,16 +1735,19 @@ runautostart(void)
 
 	free(pathpfx);
 	free(path);
-    system("fcitx5 -d &");
+    if (fork() == 0) {
+        execlp("dbus-launch", "dbus-launch", "--exit-with-session", "fcitx5", "-d", NULL);
+        _exit(1);
+    }
     if (fork() == 0) {
         execlp("picom", "picom", "--daemon", NULL);
         _exit(1);
     }
     system("feh --randomize --bg-fill $HOME/config_files/wallpaper/");
-    if (fork() == 0) {
-        execlp("slstatus", "slstatus", NULL);
-        _exit(1);
-    }
+    //if (fork() == 0) {
+    //    execlp("dwmblocks", "dwmblocks", NULL);
+    //    _exit(1);
+    //}
 }
 
 void

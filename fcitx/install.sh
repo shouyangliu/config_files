@@ -1,14 +1,9 @@
 #!/bin/bash
+set -e
 
-echo ">>> 正在更新软件包列表..."
-sudo apt update
-
-echo ">>> 正在安装 Fcitx5 及中文组件..."
 sudo apt install -y fcitx5 fcitx5-chinese-addons fcitx5-config-qt im-config
 
-echo ">>> 正在配置系统环境变量..."
-
-mkdir -p "$HOME/.config/fcitx5"
+mkdir -p "$HOME/.config/fcitx5" "$HOME/.local/share/fcitx5"
 
 cat > "$HOME/.config/fcitx5/profile" << 'EOF'
 [Groups/0]
@@ -33,21 +28,10 @@ DefaultGroup=us
 GroupNames=us:US
 EOF
 
-FCITX_CONFIG_DIR="$HOME/.local/share/fcitx5"
-mkdir -p "$FCITX_CONFIG_DIR"
-
-cat > "$FCITX_CONFIG_DIR/inputmethod.conf" << 'EOF'
+cat > "$HOME/.local/share/fcitx5/inputmethod.conf" << 'EOF'
 [InputMethods]
 EnabledIMs=keyboard-us;Pinyin;
 DefaultIM=keyboard-us
 EOF
 
-echo ">>> 安装与配置全部完成！"
-echo "请在 ~/.xprofile 或 ~/.profile 中添加以下内容："
-echo ""
-echo "export GTK_IM_MODULE=fcitx"
-echo "export QT_IM_MODULE=fcitx"
-echo "export XMODIFIERS=@im=fcitx"
-echo "fcitx5 -d"
-echo ""
-echo "然后重启电脑或重新登录。"
+echo "fcitx5 installed."

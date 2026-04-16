@@ -48,9 +48,9 @@ config.status_update_interval = 1
 
 wezterm.on('update-status', function(window, pane)
   local cwd = pane:get_current_working_dir()
-  local basename = cwd and require('wezterm.path').basename(cwd) or ''
+  local basename = cwd and wezterm.path.basename(cwd) or ''
   local user = os.getenv('USER') or 'user'
-  local hostname = require('wezterm.info').hostname()
+  local hostname = wezterm.info().hostname()
   local date = os.date('%Y-%m-%d %H:%M')
   
   local left = string.format(' %s@%s:%s ', user, hostname, basename)
