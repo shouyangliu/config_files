@@ -55,14 +55,15 @@ dwm_cpu() {
     if [ "$cpu" -lt 0 ]; then
         cpu=0
     fi
-    printf "^c$black^^b$purple^ 󰘚 %d%%" "$cpu"
+    printf "^c$black^^b$purple^ CPU: %d%%" "$cpu"
 }
 
 dwm_mem() {
     memfree=$(($(grep -m1 'MemAvailable:' /proc/meminfo | awk '{print $2}') / 1024))
     memtotal=$(($(grep -m1 'MemTotal:' /proc/meminfo | awk '{print $2}') / 1024))
     memused=$((memtotal - memfree))
-    printf "^c$black^^b$green^ 󰆼 %dM" "$memused"
+    mempercent=$((memused * 100 / memtotal))
+    printf "^c$black^^b$green^ MEM: %dM %d%%" "$memused" "$mempercent"
 }
 
 dwm_ip() {

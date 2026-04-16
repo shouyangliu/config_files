@@ -15,9 +15,7 @@ mkdir -p ~/.config/wezterm
 rm -f ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wallpaper" ~/.config/wallpaper
-ln -snf "$SCRIPT_DIR/polybar" ~/.config/polybar
 ln -snf "$SCRIPT_DIR/rofi_theme" ~/.config/rofi
-ln -snf "$SCRIPT_DIR/slstatus" ~/.config/slstatus
 ln -snf "$SCRIPT_DIR/dwm/autostart.sh" ~/.local/share/dwm/autostart.sh
 chmod +x "$SCRIPT_DIR/dwm/autostart.sh"
 chmod +x "$SCRIPT_DIR/dwm/bar/dwm_bar.sh"
@@ -52,7 +50,6 @@ run_module rofi_theme
 run_module tmux
 run_module nvim
 run_module nerdfont
-run_module polybar
 
 echo ""
 echo "==> All done!"
