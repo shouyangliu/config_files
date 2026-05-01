@@ -16,6 +16,8 @@ rm -f ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wallpaper" ~/.config/wallpaper
 ln -snf "$SCRIPT_DIR/rofi_theme" ~/.config/rofi
+rm -rf ~/.config/dwm
+ln -snf "$SCRIPT_DIR/dwm" ~/.config/dwm
 ln -snf "$SCRIPT_DIR/dwm/autostart.sh" ~/.local/share/dwm/autostart.sh
 chmod +x "$SCRIPT_DIR/dwm/autostart.sh"
 chmod +x "$SCRIPT_DIR/dwm/bar/dwm_bar.sh"
@@ -28,7 +30,8 @@ sudo apt install -y \
     libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev \
     libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev \
     libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev \
-    uthash-dev libev-dev libx11-xcb-dev meson rofi feh ripgrep git curl cargo xdotool
+    uthash-dev libev-dev libx11-xcb-dev meson rofi feh ripgrep git curl cargo xdotool \
+    flameshot
 
 echo "==> Running module installs..."
 run_module() {
@@ -43,7 +46,6 @@ run_module() {
 run_module fcitx
 run_module picom
 run_module dwm
-run_module dwmblocks
 run_module wezterm
 run_module bash
 run_module rofi_theme

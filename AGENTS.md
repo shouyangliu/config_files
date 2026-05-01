@@ -14,8 +14,7 @@
 config_files/
 ├── install.sh              # 主安装脚本
 ├── dwm/                   # DWM 窗口管理器
-├── dwmblocks/             # DWM 状态栏模块
-├── polybar/               # Polybar 状态栏
+│   └── bar/               #   自定义状态栏脚本
 ├── picom/                 # Picom 合成器
 ├── nvim/                  # Neovim 配置
 ├── wezterm/               # WezTerm 终端
@@ -23,7 +22,6 @@ config_files/
 ├── bash/                  # Bash 配置
 ├── rofi_theme/            # Rofi 主题
 ├── wallpaper/             # 壁纸目录
-├── slstatus/              # slstatus 配置
 ├── fcitx/                 # Fcitx 输入法配置
 └── nerdfont/              # 字体文件
 ```
@@ -37,11 +35,8 @@ config_files/
 | `picom/picom.conf` | `~/.picom.conf` |
 | `wezterm/wezterm.lua` | `~/.config/wezterm/wezterm.lua` |
 | `wallpaper/` | `~/.config/wallpaper` |
-| `polybar/` | `~/.config/polybar` |
 | `rofi_theme/` | `~/.config/rofi` |
-| `slstatus/` | `~/.config/slstatus` |
-| `dwm/` | 需编译安装 |
-| `dwmblocks/` | 需编译安装 |
+| `dwm/` | `~/.config/dwm` |
 
 ## 关键约定
 

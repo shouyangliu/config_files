@@ -94,7 +94,7 @@ static const char *dmenucmd[] = {
 static const char *termcmd[] = {"wezterm", "start", "--always-new-process", NULL};
 static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
 static const char *changebgcmd[] = {"feh", "--randomize", "--bg-fill",
-                                    "~/.config/wallpaper/", NULL};
+                                     "$HOME/.config/wallpaper/", NULL};
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
 static const char *polybarcmd[] = {"/bin/bash", "-c", "/home/y/config_files/polybar/launch.sh", NULL};
 
