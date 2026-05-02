@@ -1,0 +1,91 @@
+" Vim configuration
+
+" Basic settings
+set nocompatible
+set number
+set relativenumber
+set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
+set termencoding=utf-8
+set fileformat=unix
+
+" Indentation
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set smartindent
+set autoindent
+
+" Display
+set showcmd
+set showmode
+set showmatch
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set wrapscan
+set backspace=indent,eol,start
+set scrolloff=8
+set sidescrolloff=8
+
+" Interface
+set title
+set ruler
+set laststatus=2
+set showtabline=2
+set wildmenu
+set wildmode=list:longest,full
+set cmdheight=2
+set noshowmode
+
+" Files
+set nobackup
+set nowritebackup
+set noswapfile
+set undofile
+set undodir=~/.config/vim/undo
+set autoread
+set autowrite
+
+" Colors
+set t_Co=256
+set background=dark
+colorscheme desert
+
+" Key mappings
+let mapleader=" "
+nnoremap <leader>w :w<CR>
+nnoremap <leader>q :q<CR>
+nnoremap <leader>x :x<CR>
+nnoremap <leader>e :e<CR>
+
+" Window navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Plugin settings (using vim native package management)
+" Plugins should be installed to ~/.vim/pack/plugins/start/
+" Themes
+let g:gruvbox_contrast_dark = 'medium'
+let g:onedark_termcolors = 256
+let g:airline_theme = 'onedark'
+
+" NERDTree settings
+let g:NERDTreeShowHidden = 1
+let g:NERDTreeAutoDeleteBuffer = 1
+
+" If plugins are installed, enable their configurations
+if isdirectory(expand('~/.vim/pack/plugins/start/gruvbox'))
+    colorscheme gruvbox
+    set background=dark
+endif
+
+" Create undo directory
+if !isdirectory($HOME . "/.config/vim/undo")
+    call mkdir($HOME . "/.config/vim/undo", "p")
+endif

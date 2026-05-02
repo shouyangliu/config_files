@@ -1,0 +1,21 @@
+# Helix Editor Configuration
+
+theme = "dracula"
+
+[editor]
+line-number = "relative"
+mouse = true
+middle-click-paste = true
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[keys.normal]
+C-s = ":write"
+C-q = ":quit"
+
+[keys.insert]
+C-s = ":write"
+C-q = ":quit"

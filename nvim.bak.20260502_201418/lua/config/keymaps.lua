@@ -3,19 +3,20 @@ vim.g.mapleader = " "
 local map = vim.api.nvim_set_keymap
 local opt = { noremap = true, silent = true }
 
-vim.keymap.set("i", "<A-(>", "()<Left>", { noremap = true, silent = true })
-vim.keymap.set("i", "<A-[>", "[]<Left>", { noremap = true, silent = true })
-vim.keymap.set("i", "<A-{>", "{}<Left>", { noremap = true, silent = true })
-vim.keymap.set("i", "<A-<>", "<><Left>", { noremap = true, silent = true })
+vim.keymap.set("i", "(", "()<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", "[", "[]<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", "{", "{}<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", "<", "<><Left>", { noremap = true, silent = true })
 
---vim.keymap.set("i", "C-(", "(", { noremap = true, silent = true })
---vim.keymap.set("i", "C-[", "[", { noremap = true, silent = true })
---vim.keymap.set("i", "C-{", "{", { noremap = true, silent = true })
---vim.keymap.set("i", "C-<", "<", { noremap = true, silent = true })
-vim.keymap.set("i", "<A-'>", "''<Left>", { noremap = true, silent = true })
-vim.keymap.set("i", '<A-">', '""<Left>', { noremap = true, silent = true })
+vim.keymap.set("i", "C-(", "(", { noremap = true, silent = true })
+vim.keymap.set("i", "C-[", "[", { noremap = true, silent = true })
+vim.keymap.set("i", "C-{", "{", { noremap = true, silent = true })
+vim.keymap.set("i", "C-<", "<", { noremap = true, silent = true })
+vim.keymap.set("i", ",'", "''<Left>", { noremap = true, silent = true })
+vim.keymap.set("i", ',"', '""<Left>', { noremap = true, silent = true })
 
 map("n", "jk", "<Esc>", opt)
+map("i", "jk", "<Esc>", opt)
 
 map("n", "<leader>w", ":w<CR>", opt)
 map("n", "ww", ":w<CR>", opt)

@@ -1,11 +1,10 @@
 require("config.basic_setting")
 require("config.keymaps")
 require("config.lazy")
-require("lsp.init")
 
 vim.cmd("colorscheme neon")
 vim.opt.showtabline = 2
-vim.opt.laststatus = 3
+vim.opt.laststatus = 2
 vim.opt.termguicolors = true
 
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
