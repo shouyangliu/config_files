@@ -3,6 +3,22 @@ require("config.keymaps")
 require("config.lazy")
 require("lsp.init")
 
+-- 容器 LSP 管理（可选）
+local ok, container = pcall(require, "lsp.container")
+if ok then
+    vim.api.nvim_create_user_command('LspInstallInContainer', function(opts)
+        container.install_lsp_in_container(opts.args)
+    end, { nargs = 1 })
+
+    vim.api.nvim_create_user_command('LspStartContainer', function(opts)
+        container.start_container_lsp(opts.args)
+    end, { nargs = 1 })
+
+    vim.api.nvim_create_user_command('LspStopContainer', function()
+        container.stop_container_lsp()
+    end, {})
+end
+
 vim.cmd("colorscheme neon")
 vim.opt.showtabline = 2
 vim.opt.laststatus = 3
