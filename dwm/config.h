@@ -21,8 +21,8 @@ static const int topbar = 1;      /* 0 means bottom bar */
 static const int extrabar = 1;
 static const char statussep = ';';  /* separator between statuses */
 static const Bool viewontag = True; /* Switch view on tag switch */
-static const char *fonts[] = {"JetBrains Mono:style=Regular:size=10", "Symbols Nerd Font:size=10"};
-static const char dmenufont[] = "JetBrains Mono:style=Regular:size=10";
+static const char *fonts[] = {"ComicShannsMono Nerd Font:style=Regular:size=10", "Symbols Nerd Font:size=10", "monospace:size=10"};
+static const char dmenufont[] = "ComicShannsMono Nerd Font:style=Regular:size=10";
 static const char col_gray1[] = "#1a1b26";      /* background - Tokyo Night */
 static const char col_gray2[] = "#414868";      /* inactive border */
 static const char col_gray3[] = "#a9b1d6";      /* inactive text */
@@ -96,7 +96,6 @@ static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
 static const char *changebgcmd[] = {"feh", "--randomize", "--bg-fill",
                                      "$HOME/.config/wallpaper/", NULL};
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
-static const char *polybarcmd[] = {"/bin/bash", "-c", "/home/y/config_files/polybar/launch.sh", NULL};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
@@ -105,7 +104,6 @@ static const Key keys[] = {
     {MODKEY, XK_p, spawn, {.v = roficmd}},
     {MODKEY, XK_w, spawn, {.v = changebgcmd}},
     {MODKEY, XK_q, spawn, {.v = flameshotcmd}},
-    {MODKEY, XK_r, spawn, {.v = polybarcmd}},
     {MODKEY, XK_j, focusstack, {.i = +1}},
     {MODKEY, XK_k, focusstack, {.i = -1}},
     {MODKEY, XK_h, setmfact, {.f = -0.05}},

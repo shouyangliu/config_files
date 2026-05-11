@@ -30,8 +30,9 @@ dwm_date() {
 }
 
 dwm_battery() {
-    CHARGE=$(cat /sys/class/power_supply/BAT1/capacity 2>/dev/null)
-    STATUS=$(cat /sys/class/power_supply/BAT1/status 2>/dev/null)
+    BAT=$(ls /sys/class/power_supply/BAT* 2>/dev/null | head -1)
+    CHARGE=$(cat "$BAT/capacity" 2>/dev/null)
+    STATUS=$(cat "$BAT/status" 2>/dev/null)
     if [ -z "$CHARGE" ]; then
         printf "^c$grey^^b$grey^ --"
         return
@@ -80,7 +81,7 @@ dwm_separator() {
 }
 
 dwm_emoji() {
-    printf "^c$black^^b$yellow^ 🐶 "
+    printf "^c$black^^b$yellow^  "
 }
 
 while true; do

@@ -30,8 +30,8 @@ sudo apt install -y \
     libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev \
     libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev \
     libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev \
-    uthash-dev libev-dev libx11-xcb-dev meson rofi feh ripgrep git curl cargo xdotool \
-    flameshot
+    uthash-dev libev-dev libx11-xcb-dev     meson rofi feh ripgrep git curl cargo xdotool \
+    flameshot wireless-tools
 
 echo "==> Running module installs..."
 run_module() {

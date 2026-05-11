@@ -5,7 +5,6 @@ if wezterm.config_builder then
   config = wezterm.config_builder()
 end
 
-local modal = wezterm.plugin.require("https://github.com/MLFlexer/modal.wezterm")
 
 config.default_prog = {'/bin/bash'}
 
@@ -35,8 +34,6 @@ config.window_padding = {
 }
 
 config.window_background_opacity = 0.85
-config.window_decorations = "RESIZE"
-
 config.window_decorations = "RESIZE"
 config.window_close_confirmation = 'NeverPrompt'
 config.adjust_window_size_when_changing_font_size = false
@@ -79,46 +76,40 @@ config.cursor_blink_rate = 800
 config.cursor_blink_ease_in = 'Constant'
 config.cursor_blink_ease_out = 'Constant'
 
-config.leader = { key = 's', mods = 'CTRL' }
-
 config.keys = {
-  -- vim 风格退出（类似 :q）
-  { key = 'q', mods = 'LEADER', action = wezterm.action.CloseCurrentPane { confirm = false } },
-  -- vim 风格新建标签页（类似 :tabnew）
-  { key = 't', mods = 'LEADER', action = wezterm.action.SpawnTab 'CurrentPaneDomain' },
-  -- vim 风格分屏（类似 :vsp / :sp）
-  { key = 'v', mods = 'LEADER', action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' } },
-  { key = 's', mods = 'LEADER', action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' } },
-  -- vim 风格关闭标签页
-  { key = 'w', mods = 'LEADER', action = wezterm.action.CloseCurrentTab { confirm = false } },
+  -- Ctrl+/ 左右分屏
+  { key = '/', mods = 'CTRL', action = wezterm.action.SplitHorizontal { domain = 'CurrentPaneDomain' } },
+  -- Ctrl+- 上下分屏
+  { key = '-', mods = 'CTRL', action = wezterm.action.SplitVertical { domain = 'CurrentPaneDomain' } },
+  -- Ctrl+n 新建标签页
+  { key = 'n', mods = 'CTRL', action = wezterm.action.SpawnTab 'CurrentPaneDomain' },
+  -- Ctrl+Shift+q 关闭窗格
+  { key = 'q', mods = 'CTRL|SHIFT', action = wezterm.action.CloseCurrentPane { confirm = false } },
+  -- Ctrl+Shift+w 关闭标签页
+  { key = 'w', mods = 'CTRL|SHIFT', action = wezterm.action.CloseCurrentTab { confirm = false } },
   
-  -- vim 风格窗格导航（无需 Leader，直接 Alt+hjkl）
+  -- Alt+hjkl 导航窗格
   { key = 'h', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Left' },
   { key = 'j', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Down' },
   { key = 'k', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Up' },
   { key = 'l', mods = 'ALT', action = wezterm.action.ActivatePaneDirection 'Right' },
   
-  -- 保留 Leader+hjkl 作为备用
-  { key = 'h', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Left' },
-  { key = 'j', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Down' },
-  { key = 'k', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Up' },
-  { key = 'l', mods = 'LEADER', action = wezterm.action.ActivatePaneDirection 'Right' },
-  
-  -- vim 风格调整窗格大小（类似 Ctrl+w >/< 或 Ctrl+w +/-）
-  { key = '>', mods = 'LEADER', action = wezterm.action.AdjustPaneSize { 'Right', 5 } },
-  { key = '<', mods = 'LEADER', action = wezterm.action.AdjustPaneSize { 'Left', 5 } },
-  { key = '+', mods = 'LEADER', action = wezterm.action.AdjustPaneSize { 'Up', 5 } },
-  { key = '-', mods = 'LEADER', action = wezterm.action.AdjustPaneSize { 'Down', 5 } },
+  -- Ctrl+Shift+<>+- 调整窗格大小
+  { key = '>', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Right', 5 } },
+  { key = '<', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Left', 5 } },
+  { key = '+', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Up', 5 } },
+  { key = '-', mods = 'CTRL|SHIFT', action = wezterm.action.AdjustPaneSize { 'Down', 5 } },
 
-  { key = '1', mods = 'LEADER', action = wezterm.action.ActivateTab(0) },
-  { key = '2', mods = 'LEADER', action = wezterm.action.ActivateTab(1) },
-  { key = '3', mods = 'LEADER', action = wezterm.action.ActivateTab(2) },
-  { key = '4', mods = 'LEADER', action = wezterm.action.ActivateTab(3) },
-  { key = '5', mods = 'LEADER', action = wezterm.action.ActivateTab(4) },
-  { key = '6', mods = 'LEADER', action = wezterm.action.ActivateTab(5) },
-  { key = '7', mods = 'LEADER', action = wezterm.action.ActivateTab(6) },
-  { key = '8', mods = 'LEADER', action = wezterm.action.ActivateTab(7) },
-  { key = '9', mods = 'LEADER', action = wezterm.action.ActivateTab(8) },
+  -- Ctrl+1~9 切换标签页
+  { key = '1', mods = 'CTRL', action = wezterm.action.ActivateTab(0) },
+  { key = '2', mods = 'CTRL', action = wezterm.action.ActivateTab(1) },
+  { key = '3', mods = 'CTRL', action = wezterm.action.ActivateTab(2) },
+  { key = '4', mods = 'CTRL', action = wezterm.action.ActivateTab(3) },
+  { key = '5', mods = 'CTRL', action = wezterm.action.ActivateTab(4) },
+  { key = '6', mods = 'CTRL', action = wezterm.action.ActivateTab(5) },
+  { key = '7', mods = 'CTRL', action = wezterm.action.ActivateTab(6) },
+  { key = '8', mods = 'CTRL', action = wezterm.action.ActivateTab(7) },
+  { key = '9', mods = 'CTRL', action = wezterm.action.ActivateTab(8) },
 
   { key = 'Tab', mods = 'CTRL', action = wezterm.action.ActivateTabRelative(1) },
   { key = 'Tab', mods = 'CTRL|SHIFT', action = wezterm.action.ActivateTabRelative(-1) },
@@ -178,12 +169,5 @@ wezterm.on('format-window-title', function(tab, pane, tabs, panes, config)
   end
   return title
 end)
-
--- 应用 modal.wezterm 插件
-modal.apply_to_config(config)
-modal.set_default_keys(config)
-
--- 添加 Esc 进入 copy mode
-table.insert(config.keys, { key = 'Escape', action = wezterm.action.ActivateCopyMode })
 
 return config
