@@ -33,6 +33,8 @@ sudo apt install -y \
     uthash-dev libev-dev libx11-xcb-dev     meson rofi feh ripgrep git curl cargo xdotool \
     flameshot wireless-tools
 
+
+
 echo "==> Running module installs..."
 run_module() {
     local module=$1
