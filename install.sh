@@ -33,7 +33,17 @@ sudo apt install -y \
     uthash-dev libev-dev libx11-xcb-dev     meson rofi feh ripgrep git curl cargo xdotool \
     flameshot wireless-tools
 
-
+# rofi 1.7.2+ required for type-5 theme; build from source if too old
+ROFI_VER=$(rofi -version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' | head -1 || echo "0")
+if dpkg --compare-versions "$ROFI_VER" lt "1.7.2"; then
+    echo "==> Building rofi from source (system version $ROFI_VER < 1.7.2)..."
+    sudo apt install -y libpango1.0-dev libcairo2-dev libglib2.0-dev \
+        libxkbcommon-dev libxcb-xkb-dev libxcb-xrm-dev libstartup-notification0-dev \
+        flex bison
+    git clone --depth=1 --branch=1.7.3 https://github.com/davatorium/rofi /tmp/rofi
+    (cd /tmp/rofi && meson setup build && ninja -C build && sudo ninja -C build install)
+    rm -rf /tmp/rofi
+fi
 
 echo "==> Running module installs..."
 run_module() {
