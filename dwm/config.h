@@ -93,8 +93,7 @@ static const char *dmenucmd[] = {
     "-nf",       col_gray3, "-sb",    col_cyan, "-sf",     col_gray4, NULL};
 static const char *termcmd[] = {"wezterm", "start", "--always-new-process", NULL};
 static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
-static const char *changebgcmd[] = {"feh", "--randomize", "--bg-fill",
-                                     "$HOME/.config/wallpaper/", NULL};
+static const char *changebgcmd[] = SHCMD("feh --randomize --bg-fill $HOME/.config/wallpaper/");
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
 
 static const Key keys[] = {
