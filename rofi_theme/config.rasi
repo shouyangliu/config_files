@@ -1,4 +1,3 @@
-@theme "~/.config/rofi/launchers/type-5/style-2"
 configuration {
     show-icons: true;
 }
