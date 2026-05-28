@@ -23,7 +23,13 @@ chmod +x "$SCRIPT_DIR/dwm/autostart.sh"
 chmod +x "$SCRIPT_DIR/dwm/bar/dwm_bar.sh"
 
 echo "==> Installing dependencies..."
-sudo apt update
+# Fix security repo to use TUNA mirror if needed
+grep -q 'mirrors.tuna.tsinghua.edu.cn/ubuntu.*jammy-security' /etc/apt/sources.list || \
+  sudo sed -i 's|http://security.ubuntu.com/ubuntu|http://mirrors.tuna.tsinghua.edu.cn/ubuntu|g' /etc/apt/sources.list
+
+# Add missing wezterm GPG key
+curl -fsSL https://wezterm.org/wezterm.gpg | sudo gpg --no-default-keyring --keyring /usr/share/keyrings/wezterm.gpg --import --batch 2>/dev/null || true
+sudo apt update || echo "Warning: apt update encountered errors, continuing..."
 sudo apt install -y \
     libx11-dev libxinerama-dev libfontconfig-dev libxft-dev libxext-dev libxcb1-dev \
     libxcb-damage0-dev libxcb-xfixes0-dev libxcb-shape0-dev libxcb-render-util0-dev \
@@ -32,18 +38,6 @@ sudo apt install -y \
     libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev \
     uthash-dev libev-dev libx11-xcb-dev     meson rofi feh ripgrep git curl cargo xdotool \
     flameshot wireless-tools
-
-# rofi 1.7.2+ required for type-5 theme; build from source if too old
-ROFI_VER=$(rofi -version 2>/dev/null | grep -oP '\d+\.\d+\.\d+' | head -1 || echo "0")
-if dpkg --compare-versions "$ROFI_VER" lt "1.7.2"; then
-    echo "==> Building rofi from source (system version $ROFI_VER < 1.7.2)..."
-    sudo apt install -y libpango1.0-dev libcairo2-dev libglib2.0-dev \
-        libxkbcommon-dev libxcb-xkb-dev libxcb-xrm-dev libstartup-notification0-dev \
-        flex bison
-    git clone --depth=1 --branch=1.7.3 https://github.com/davatorium/rofi /tmp/rofi
-    (cd /tmp/rofi && meson setup build && ninja -C build && sudo ninja -C build install)
-    rm -rf /tmp/rofi
-fi
 
 echo "==> Running module installs..."
 run_module() {
