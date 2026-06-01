@@ -55,3 +55,4 @@ PS1='\[\033[1;32m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[1;31m\]$(parse_git_st
 alias ls='eza --icons'
 alias ll='eza -l --icons'
 alias la='eza -la --icons'
+export PATH="$HOME/.pixi/bin:$PATH"
