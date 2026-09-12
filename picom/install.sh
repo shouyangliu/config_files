@@ -3,17 +3,24 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# 检查 Ubuntu 版本，只支持 24.04+
+# 检查 Ubuntu 版本，支持 20.04 / 22.04 / 24.04+
 if ! grep -qiE "ubuntu" /etc/os-release 2>/dev/null; then
     echo "Error: This script only supports Ubuntu."
     exit 1
 fi
 
 VERSION=$(grep VERSION_ID /etc/os-release | cut -d'"' -f2)
-if [ "$(echo "$VERSION < 24.04" | bc)" -eq 1 ]; then
-    echo "Error: Ubuntu $VERSION is not supported. Requires 24.04+."
-    exit 1
-fi
+case "$VERSION" in
+    20.04|22.04|24.04) ;;
+    *)
+        if [ "$(echo "$VERSION > 24.04" | bc)" -eq 1 ]; then
+            echo "Ubuntu $VERSION (newer than 24.04), proceeding..."
+        else
+            echo "Error: Ubuntu $VERSION is not supported. Requires 20.04+."
+            exit 1
+        fi
+        ;;
+esac
 
 if command -v picom &>/dev/null; then
     echo "picom already installed: $(picom --version 2>&1)"
@@ -21,13 +28,29 @@ if command -v picom &>/dev/null; then
 fi
 
 echo "Installing build dependencies on Ubuntu $VERSION..."
-sudo apt install -y \
-    libx11-dev libx11-xcb-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev \
-    libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev \
-    libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-glx0-dev \
-    libxcb-dpms0-dev libxcb-util-dev \
-    libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev \
-    libev-dev libepoxy-dev uthash-dev meson ninja-build
+
+# 基础依赖（所有版本通用）
+DEPS=(
+    libx11-dev libx11-xcb-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev
+    libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev
+    libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-glx0-dev
+    libxcb-dpms0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev
+    libpcre2-dev libev-dev uthash-dev meson ninja-build
+)
+
+# 24.04+ 新增的依赖
+if [ "$(echo "$VERSION >= 24.04" | bc)" -eq 1 ]; then
+    DEPS+=(libepoxy-dev)
+fi
+
+for dep in "${DEPS[@]}"; do
+    sudo apt install -y "$dep" || { echo "Error: failed to install $dep"; exit 1; }
+done
+
+# xcb-util 兼容
+sudo apt install -y libxcb-util-dev 2>/dev/null || \
+sudo apt install -y libxcb-util0-dev 2>/dev/null || \
+{ echo "Error: libxcb-util not found"; exit 1; }
 
 echo "Building picom..."
 cd "$SCRIPT_DIR/source"
