@@ -7,6 +7,9 @@ dwm/dwm
 build/
 .cache/
 
+# Picom source (downloaded separately)
+picom/source/
+
 # Editor files
 *.swp
 *.swo

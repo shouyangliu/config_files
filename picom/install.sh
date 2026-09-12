@@ -1,9 +1,8 @@
 #!/bin/bash
 set -e
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PICOM_BIN="/usr/local/bin/picom"
-PICOM_REPO="https://github.com/FT-Labs/picom.git"
-BUILD_DIR="/tmp/picom-build"
 
 if command -v picom &>/dev/null; then
     echo "picom already installed: $(picom --version 2>&1)"
@@ -17,19 +16,14 @@ sudo apt install -y \
     libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-glx0-dev \
     libxcb-util-dev \
     libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev \
-    libev-dev libepoxy-dev uthash-dev meson ninja-build git
-
-echo "Cloning FT-Labs/picom..."
-rm -rf "$BUILD_DIR"
-git clone --depth 1 "$PICOM_REPO" "$BUILD_DIR"
+    libev-dev libepoxy-dev uthash-dev meson ninja-build
 
 echo "Building picom..."
-cd "$BUILD_DIR"
+cd "$SCRIPT_DIR/source"
 meson setup --buildtype=release --prefix=/usr/local build
 ninja -C build
 
 echo "Installing picom..."
 sudo ninja -C build install
 
-rm -rf "$BUILD_DIR"
 echo "picom installed: $(picom --version 2>&1)"
