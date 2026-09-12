@@ -2,7 +2,6 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-PICOM_BIN="/usr/local/bin/picom"
 
 if command -v picom &>/dev/null; then
     echo "picom already installed: $(picom --version 2>&1)"
@@ -11,28 +10,28 @@ fi
 
 echo "Installing build dependencies..."
 
-# 根据系统版本安装依赖，兼容 20.04 / 22.04 / 24.04+
-install_deps() {
-    sudo apt install -y \
-        libx11-dev libx11-xcb-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev \
-        libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev \
-        libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-glx0-dev \
-        libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev \
-        libev-dev libepoxy-dev uthash-dev meson ninja-build 2>/dev/null && return 0
+# 基础依赖
+DEPS=(
+    libx11-dev libx11-xcb-dev libxcb1-dev libxcb-damage0-dev libxcb-xfixes0-dev
+    libxcb-shape0-dev libxcb-render-util0-dev libxcb-render0-dev libxcb-randr0-dev
+    libxcb-composite0-dev libxcb-image0-dev libxcb-present-dev libxcb-glx0-dev
+    libxcb-dpms0-dev libpixman-1-dev libdbus-1-dev libconfig-dev libgl1-mesa-dev
+    libpcre2-dev libev-dev libepoxy-dev uthash-dev meson ninja-build
+)
 
-    # 20.04 需要额外的包名
-    sudo apt install -y \
-        libxcb-dpms0-dev libxcb-util-dev 2>/dev/null && return 0
+# 逐个安装，跳过不存在的包
+for dep in "${DEPS[@]}"; do
+    sudo apt install -y "$dep" 2>/dev/null || echo "Warning: $dep not found, skipping..."
+done
 
-    # 22.04+ 的包名
-    sudo apt install -y \
-        libxcb-dpms-dev libxcb-util-dev 2>/dev/null && return 0
-}
-
-install_deps
+# xcb-util 可能叫不同名字
+sudo apt install -y libxcb-util-dev 2>/dev/null || \
+sudo apt install -y libxcb-util0-dev 2>/dev/null || \
+echo "Warning: libxcb-util not found, skipping..."
 
 echo "Building picom..."
 cd "$SCRIPT_DIR/source"
+rm -rf build
 meson setup --buildtype=release --prefix=/usr/local build
 ninja -C build
 
