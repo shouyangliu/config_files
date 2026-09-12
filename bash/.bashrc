@@ -34,9 +34,9 @@ parse_git_status() {
     local status=$(git status --porcelain 2>/dev/null)
     local staged unstaged untracked
     
-    staged=$(echo "$status" | grep -c "^[MADRC]" )
-    unstaged=$(echo "$status" | grep -c "^.[MADRC]" )
-    untracked=$(echo "$status" | grep -c "^??" )
+    staged=$(echo "$status" | grep -c "^[MADRC]" || true)
+    unstaged=$(echo "$status" | grep -c "^.[MADRC]" || true)
+    untracked=$(echo "$status" | grep -c "^??" || true)
     
     local icon="📂"
     [ -n "$status" ] && icon="📁"
@@ -52,6 +52,8 @@ parse_git_status() {
 PS1='\[\033[1;32m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[1;31m\]$(parse_git_status)\[\033[0m\]\$ '
 
 # Aliases
-alias ls='eza --icons'
-alias ll='eza -l --icons'
-alias la='eza -la --icons'
+if command -v eza &>/dev/null; then
+    alias ls='eza --icons'
+    alias ll='eza -l --icons'
+    alias la='eza -la --icons'
+fi

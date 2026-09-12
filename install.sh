@@ -23,12 +23,26 @@ chmod +x "$SCRIPT_DIR/dwm/autostart.sh"
 chmod +x "$SCRIPT_DIR/dwm/bar/dwm_bar.sh"
 
 echo "==> Installing dependencies..."
-# Fix security repo to use TUNA mirror if needed
-grep -q 'mirrors.tuna.tsinghua.edu.cn/ubuntu.*jammy-security' /etc/apt/sources.list || \
-  sudo sed -i 's|http://security.ubuntu.com/ubuntu|http://mirrors.tuna.tsinghua.edu.cn/ubuntu|g' /etc/apt/sources.list
 
-# Add missing wezterm GPG key
-curl -fsSL https://wezterm.org/wezterm.gpg | sudo gpg --no-default-keyring --keyring /usr/share/keyrings/wezterm.gpg --import --batch 2>/dev/null || true
+# 临时禁用 ROS 源，避免 apt install 拉入不需要的 ROS 包
+ROS_DISABLED=false
+for f in /etc/apt/sources.list.d/ros-*.sources /etc/apt/sources.list.d/ros-*.list; do
+    [ -f "$f" ] || continue
+    if [[ "$f" != *.disabled ]]; then
+        sudo mv "$f" "${f}.disabled"
+        ROS_DISABLED=true
+        echo "==> Temporarily disabled ROS source: $f"
+    fi
+done
+trap 'if $ROS_DISABLED; then for f in /etc/apt/sources.list.d/ros-*.sources.disabled /etc/apt/sources.list.d/ros-*.list.disabled; do [ -f "$f" ] && sudo mv "$f" "${f%.disabled}"; done; fi' EXIT
+
+# Fix security repo to use TUNA mirror if needed
+if ! grep -q 'mirrors.tuna.tsinghua.edu.cn/ubuntu.*jammy-security' /etc/apt/sources.list; then
+  echo "==> Backing up /etc/apt/sources.list..."
+  sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak.$(date +%Y%m%d%H%M%S)
+  sudo sed -i 's|http://security.ubuntu.com/ubuntu|http://mirrors.tuna.tsinghua.edu.cn/ubuntu|g' /etc/apt/sources.list
+fi
+
 sudo apt update || echo "Warning: apt update encountered errors, continuing..."
 sudo apt install -y \
     libx11-dev libxinerama-dev libfontconfig-dev libxft-dev libxext-dev libxcb1-dev \
@@ -36,7 +50,7 @@ sudo apt install -y \
     libxcb-render0-dev libxcb-randr0-dev libxcb-composite0-dev libxcb-image0-dev \
     libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev \
     libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev \
-    uthash-dev libev-dev libx11-xcb-dev     meson rofi feh ripgrep git curl cargo xdotool \
+    uthash-dev libev-dev libx11-xcb-dev meson rofi feh ripgrep git curl cargo xdotool \
     flameshot wireless-tools
 
 echo "==> Running module installs..."

@@ -9,11 +9,14 @@ if ! grep -qiE "ubuntu" /etc/os-release 2>/dev/null; then
     exit 1
 fi
 
+# 确保 bc 已安装
+command -v bc &>/dev/null || sudo apt install -y bc
+
 VERSION=$(grep VERSION_ID /etc/os-release | cut -d'"' -f2)
 case "$VERSION" in
     20.04|22.04|24.04) ;;
     *)
-        if [ "$(echo "$VERSION > 24.04" | bc)" -eq 1 ]; then
+        if [ "$(echo "$VERSION > 24.04" | bc -l)" -eq 1 ]; then
             echo "Ubuntu $VERSION (newer than 24.04), proceeding..."
         else
             echo "Error: Ubuntu $VERSION is not supported. Requires 20.04+."

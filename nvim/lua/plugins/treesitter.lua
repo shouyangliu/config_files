@@ -1,12 +1,19 @@
 return {
     "nvim-treesitter/nvim-treesitter",
+    lazy = false,
     build = ":TSUpdate",
-    pin = true,  -- 锁定版本，避免 API 变更
-    config = function()
-        require("nvim-treesitter").setup({
-            ensure_installed = { "c", "cpp", "lua", "vim", "python", "bash" },
-            highlight = { enable = true },
-            indent = { enable = true },
+    opts = {
+        ensure_installed = { "c", "cpp", "lua", "vim", "python", "bash" },
+    },
+    config = function(_, opts)
+        require("nvim-treesitter").setup({})
+        require("nvim-treesitter").install(opts.ensure_installed)
+
+        vim.api.nvim_create_autocmd("FileType", {
+            pattern = { "c", "cpp", "lua", "vim", "python", "bash", "javascript", "typescript", "json", "yaml", "html", "css", "markdown" },
+            callback = function()
+                vim.treesitter.start()
+            end,
         })
     end,
 }

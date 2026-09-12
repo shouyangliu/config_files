@@ -34,13 +34,3 @@ vim.lsp.config('cmake', {
 
 -- 启用 LSP 服务器
 vim.lsp.enable({ 'lua_ls', 'clangd', 'pyright', 'cmake' })
-
--- LSP 附加时的配置
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if not client then return end
-
-    -- 语义高亮在 Neovim 0.12+ 会自动启用，无需手动调用
-  end,
-})

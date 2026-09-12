@@ -1,7 +1,5 @@
 --utf8
 vim.g.encoding = 'UTF-8'
-vim.g.fileencodings= 'UTF-8'
-vim.g.termencoding= 'UTF-8'
 vim.wo.number = true --显示行号
 vim.wo.relativenumber = true --显示相对行号
 --最大列数
@@ -33,7 +31,6 @@ vim.o.backup = false
 vim.o.swapfile = false
 vim.o.updatetime = 300
 vim.o.timeoutlen = 300
-vim.cmd "set showmatch"
 vim.cmd "set splitbelow"
 vim.cmd "set splitright"
 --vim.cmd "set foldmethod=indent" -- fold type
@@ -46,8 +43,7 @@ vim.opt.mouse='a'
 -- vim.o.foldenable = false
 
 --剪贴板
-vim.cmd "set clipboard+=unnamedplus"
+vim.opt.clipboard:append("unnamedplus")
 
 -----vgit
---vim.o.insearch = false
 vim.wo.signcolumn = 'yes'

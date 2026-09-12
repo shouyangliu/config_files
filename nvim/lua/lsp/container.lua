@@ -1,22 +1,22 @@
 -- Docker 容器 LSP 管理
 local M = {}
 
+-- 校验容器名称，只允许字母、数字、连字符、下划线
+local function validate_container(name)
+    if not name or name == "" then return false end
+    return name:match("^[%w%-%_]+$") ~= nil
+end
+
 -- 检测容器内是否有某个命令
 local function container_has_command(container, cmd)
-    local check_cmd = string.format("docker exec %s which %s 2>/dev/null", container, cmd)
-    local handle = io.popen(check_cmd)
-    if handle then
-        local result = handle:read("*a")
-        handle:close()
-        return result ~= ""
-    end
-    return false
+    local result = vim.fn.system({"docker", "exec", container, "which", cmd})
+    return vim.v.shell_error == 0 and result ~= ""
 end
 
 -- 在容器内安装 LSP
 function M.install_lsp_in_container(container)
-    if not container or container == "" then
-        vim.notify("请指定容器名称: :LspInstallInContainer <container_name>", vim.log.levels.WARN)
+    if not validate_container(container) then
+        vim.notify("无效的容器名称，只允许字母、数字、连字符、下划线", vim.log.levels.WARN)
         return
     end
 
@@ -24,16 +24,17 @@ function M.install_lsp_in_container(container)
 
     -- 安装常用 LSP 的命令
     local install_cmds = {
-        lua_ls = "apt-get update && apt-get install -y lua-language-server",
-        clangd = "apt-get update && apt-get install -y clangd",
-        pyright = "pip install pyright",
-        cmake = "pip install cmake-language-server",
+        lua_ls = { "bash", "-c", "apt-get update && apt-get install -y lua-language-server" },
+        clangd = { "bash", "-c", "apt-get update && apt-get install -y clangd" },
+        pyright = { "bash", "-c", "pip install pyright" },
+        cmake = { "bash", "-c", "pip install cmake-language-server" },
     }
 
     for name, cmd in pairs(install_cmds) do
-        if not container_has_command(container, name == "pyright" and "pyright-langserver" or name) then
+        local check_name = name == "pyright" and "pyright-langserver" or name
+        if not container_has_command(container, check_name) then
             vim.notify("安装 " .. name .. "...", vim.log.levels.INFO)
-            local full_cmd = string.format("docker exec %s bash -c '%s'", container, cmd)
+            local full_cmd = vim.list_extend({ "docker", "exec", container }, cmd)
             vim.fn.system(full_cmd)
             if vim.v.shell_error == 0 then
                 vim.notify(name .. " 安装成功", vim.log.levels.INFO)

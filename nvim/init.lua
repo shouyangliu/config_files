@@ -19,7 +19,6 @@ if ok then
     end, {})
 end
 
-vim.cmd("colorscheme neon")
 vim.opt.showtabline = 2
 vim.opt.laststatus = 3
 vim.opt.termguicolors = true

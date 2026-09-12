@@ -52,7 +52,13 @@ dwm_cpu() {
     sleep 0.5
     read cpu a b c idle rest < /proc/stat
     total=$((a+b+c+idle))
-    cpu=$((100*( (total-prevtotal) - (idle-previdle) ) / (total-prevtotal) ))
+    local diff_idle=$((idle-previdle))
+    local diff_total=$((total-prevtotal))
+    if [ "$diff_total" -gt 0 ]; then
+        cpu=$((100*(diff_total-diff_idle)/diff_total))
+    else
+        cpu=0
+    fi
     if [ "$cpu" -lt 0 ]; then
         cpu=0
     fi
