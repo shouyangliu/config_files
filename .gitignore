@@ -1,0 +1,22 @@
+# Compiled binaries
+*.o
+*.d
+dwm/dwm
+
+# Build directories
+build/
+.cache/
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Nix
+result
