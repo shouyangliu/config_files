@@ -65,6 +65,22 @@ run_module() {
 
 run_module fcitx
 run_module picom
+
+# 屏幕检测和配置
+echo "==> Detecting monitors..."
+if [ -f "$SCRIPT_DIR/detect_monitors.sh" ]; then
+    if [ "$DISPLAY" ] || [ "$WAYLAND_DISPLAY" ]; then
+        # 检查是否有图形环境，决定使用图形界面还是命令行界面
+        if [ "$DISPLAY" ] && command -v zenity &> /dev/null; then
+            "$SCRIPT_DIR/detect_monitors.sh" || echo "Warning: Monitor detection skipped"
+        else
+            "$SCRIPT_DIR/detect_monitors.sh" --skip-gui || echo "Warning: Monitor detection skipped"
+        fi
+    else
+        echo "Warning: No display detected, skipping monitor configuration"
+    fi
+fi
+
 run_module dwm
 run_module wezterm
 run_module bash
