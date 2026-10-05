@@ -46,7 +46,7 @@ run_module() {
 
 run_module fcitx
 run_module picom
-run_module chadwm
+run_module awesome
 run_module wezterm
 run_module bash
 run_module rofi_theme

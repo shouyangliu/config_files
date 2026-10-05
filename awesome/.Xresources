@@ -1,0 +1,13 @@
+! 从原 chadwm/.Xresources 搬过来（chadwm 目录已删）。
+!
+! 只保留了 Xft 全局字体渲染设置。原来的 st.* 和 tabbed.* 是给 st 终端和
+! tabbed 用的，这两个程序本机都没装、也没在用，已去掉；那一段 One Dark
+! 色板（*background / *colorN）同样没有程序会读（wezterm、rofi、GTK 应用
+! 都走各自的配置），也一并去掉。
+
+Xft.antialias:	1
+Xft.hinting:	1
+Xft.autohint:	0
+Xft.hintstyle:	hintslight
+Xft.rgba:	rgb
+Xft.lcdfilter:	lcddefault
