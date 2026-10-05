@@ -1,0 +1,80 @@
+# dunst 通知样式（Tokyo Night，对齐 dwm/config.h 的窗口配色和 rofi/theme.rasi）
+#
+# 这份**只写要改的键**。dunst 找配置是「命中第一个就停」，不会跟
+# /etc/xdg/dunst/dunstrc 合并 —— 所以这里没写的键，走的是 dunst 编译进去的
+# 内置默认值（那份 /etc/xdg 的文件本身就是把内置默认值抄了一遍，两者一致）。
+#
+# 键名是按 Ubuntu 22.04 的 dunst **1.5.0** 写的（`apt-get download dunst` 拆包
+# 核对过 /etc/xdg/dunst/dunstrc 的键集）。1.5 用 geometry 定位，没有后来的
+# width/height/origin/offset、也没有 gap_size / progress_bar / notification_limit
+# —— 那些是 1.6+ 才加的，写进来只会刷一串 unknown option 警告。
+
+[global]
+    monitor = 0
+    follow = mouse
+
+    # [{宽}]x{层数}[±x±y]：**高度是"最多堆几条通知"，不是像素**，宽度和偏移才是像素。
+    # y = +30 是为了让开顶部那条 19px 的 dwm 状态栏（实测 xwininfo：1855x19+0+0，
+    # 宽度不是 1920 是因为右边 65px 被 systray 占了）。
+    geometry = "340x5-16+30"
+
+    # 不用 dunst 自己画圆角：picom.conf 里全局 corner-radius = 12 会给每个窗口
+    # （包括通知）统一上圆角。这里再画一次会是两层圆角叠着，边缘反而毛糙。
+    corner_radius = 0
+
+    # 同理，背景保持不透明 —— picom.conf 的 blur-background-exclude 里点名排除了
+    # class_g = 'Dunst'，本来也不会给它做毛玻璃。
+    transparency = 0
+
+    frame_width = 2
+    frame_color = "#7aa2f7"
+    separator_height = 1
+    separator_color = frame
+
+    padding = 10
+    horizontal_padding = 12
+
+    font = ComicShannsMono Nerd Font 10
+    line_height = 0
+    markup = full
+    format = "<b>%s</b>\n%b"
+    alignment = left
+    vertical_alignment = center
+    word_wrap = yes
+    ellipsize = middle
+
+    icon_position = left
+    min_icon_size = 16
+    max_icon_size = 48
+    icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
+
+    sort = yes
+    indicate_hidden = yes
+    sticky_history = yes
+    history_length = 30
+
+    # 通知里点"默认动作"是走 rofi 而不是默认的 dmenu —— 这套桌面没有 dmenu 的
+    # 图形化用法，dmenu_run 只在 Super+B 用一下。
+    dmenu = /usr/bin/rofi -dmenu -p dunst:
+
+    mouse_left_click = close_current
+    mouse_middle_click = do_action, close_current
+    mouse_right_click = close_all
+
+[urgency_low]
+    background = "#1a1b26"
+    foreground = "#a9b1d6"
+    frame_color = "#414868"
+    timeout = 5
+
+[urgency_normal]
+    background = "#1a1b26"
+    foreground = "#c0caf5"
+    frame_color = "#7aa2f7"
+    timeout = 8
+
+[urgency_critical]
+    background = "#1a1b26"
+    foreground = "#f7768e"
+    frame_color = "#f7768e"
+    timeout = 0

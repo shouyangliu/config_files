@@ -59,6 +59,7 @@ run_module() {
 run_module fcitx
 run_module picom
 run_module dwm
+run_module dunst
 run_module wezterm
 run_module bash
 run_module rofi_theme

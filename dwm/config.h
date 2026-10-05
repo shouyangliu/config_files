@@ -1,5 +1,12 @@
 /* See LICENSE file for copyright and license details. */
 
+/* 这份 config.h 是全仓库唯一一处 include：XF86 那几个多媒体键的 keysym
+   （XF86XK_AudioRaiseVolume 之类）定义在 <X11/XF86keysym.h> 里，而 dwm.c 自己
+   只 include 了 Xlib.h / Xatom.h / Xproto.h / Xutil.h / Xft.h，没有这个头 ——
+   不补上就直接编译报 "XF86XK_AudioRaiseVolume undeclared"。
+   放在这里是因为 config.h 只被 dwm.c 包含，且在所有 dwm.c 的 include 之后。 */
+#include <X11/XF86keysym.h>
+
 /* appearance */
 static const unsigned int borderpx = 4; /* border pixel of windows */
 static const unsigned int borderpx_focused = 6; /* border pixel for focused window */
@@ -96,6 +103,21 @@ static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
 static const char *changebgcmd[] = {"/bin/sh", "-c", "feh --randomize --bg-fill $HOME/.config/wallpaper/", NULL};
 static const char *flameshotcmd[] = {"flameshot", "gui", NULL};
 
+/* 音频 / 亮度：笔记本的 XF86 多媒体键。
+   pactl 的 @DEFAULT_SINK@ 会跟着当前默认输出走（插耳机、切 HDMI 都不用改配置），
+   比写死 amixer 的 Master 稳。亮度走 brightnessctl（装包时带了 udev 规则，
+   普通用户即可写，不用 sudo）。 */
+static const char *volupcmd[] = {"pactl", "set-sink-volume", "@DEFAULT_SINK@", "+5%", NULL};
+static const char *voldowncmd[] = {"pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL};
+static const char *volmutecmd[] = {"pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL};
+static const char *brupcmd[] = {"brightnessctl", "set", "10%+", NULL};
+static const char *brdowncmd[] = {"brightnessctl", "set", "10%-", NULL};
+
+/* 锁屏。slock 直接抓 X 的键盘/鼠标，不给任何提示框，锁上就是黑屏。
+   另外 autostart.sh 里挂了 xss-lock —— 它负责两件这里做不到的事：
+   合盖/挂起前自动锁（logind 的 PrepareForSleep），以及 X 空闲超时后锁。 */
+static const char *lockcmd[] = {"slock", NULL};
+
 static const Key keys[] = {
     /* modifier                     key        function        argument */
     {MODKEY, XK_b, spawn, {.v = dmenucmd}},
@@ -103,6 +125,15 @@ static const Key keys[] = {
     {MODKEY, XK_p, spawn, {.v = roficmd}},
     {MODKEY, XK_w, spawn, {.v = changebgcmd}},
     {MODKEY, XK_q, spawn, {.v = flameshotcmd}},
+    {MODKEY, XK_Escape, spawn, {.v = lockcmd}},
+
+    /* XF86 多媒体键：修饰键写 0，就是"裸按"。这几个 keysym 不代表具体键位，
+       而是笔记本 Fn 行发出来的多媒体码 —— 换键盘也照样能用。 */
+    {0, XF86XK_AudioRaiseVolume, spawn, {.v = volupcmd}},
+    {0, XF86XK_AudioLowerVolume, spawn, {.v = voldowncmd}},
+    {0, XF86XK_AudioMute, spawn, {.v = volmutecmd}},
+    {0, XF86XK_MonBrightnessUp, spawn, {.v = brupcmd}},
+    {0, XF86XK_MonBrightnessDown, spawn, {.v = brdowncmd}},
     {MODKEY, XK_j, focusstack, {.i = +1}},
     {MODKEY, XK_k, focusstack, {.i = -1}},
     {MODKEY, XK_h, setmfact, {.f = -0.05}},
