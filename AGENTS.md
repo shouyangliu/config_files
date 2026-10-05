@@ -16,10 +16,9 @@ config_files/
 ├── chadwm/                # Chadwm 窗口管理器（dwm 分支，当前使用）
 │   ├── chadwm/            #   源码；config.h 与 config.def.h 均需改，改完重编译
 │   ├── scripts/           #   状态栏 bar.sh + bar_themes/ 配色
-│   ├── eww/               #   eww widget 面板（Super+E）
+│   ├── eww/               #   eww widget 面板（默认不装，见下）
 │   └── .Xresources        #   软链到 ~/.Xresources
 ├── dwm/                   # 旧 DWM（已弃用，仅保留备用）
-├── dwl/                   # Dwl（Wayland，未启用）
 ├── picom/                 # Picom 合成器
 ├── nvim/                  # Neovim 配置
 ├── wezterm/               # WezTerm 终端
@@ -43,7 +42,6 @@ config_files/
 | `rofi_theme/` | `~/.config/rofi` |
 | `chadwm/` | `~/.config/chadwm` |
 | `chadwm/.Xresources` | `~/.Xresources` |
-| `dwl/` | `~/.config/dwl` |
 
 ## 主题切换（chadwm）
 
@@ -59,6 +57,36 @@ config_files/
 
 > **注意**：`chadwm/chadwm/Makefile` 的 `clean` 目标会 `rm -f config.h`，而 config.h 规则是
 > `cp config.def.h`。所以**不要用 `make clean`**，否则本地 config.h 会被 config.def.h 覆盖。
+
+## eww（默认不安装）
+
+`install.sh` **不安装 eww**：上游 6 个 release 全部没有预编译产物，Ubuntu 源里也没有，
+只能从源码编译：
+
+```bash
+cargo install --locked --no-default-features --features x11 \
+    --git https://github.com/elkowar/eww --tag v0.6.0
+```
+
+⚠️ 不要用 `cargo install eww` —— crates.io 上那个同名的 `eww` 是**另一个项目**
+（egui backend，2021 年的 0.0.1-alpha），装出来不是这个 eww。
+
+未安装时状态栏上那个 eww 图标点了没反应（`Super+E` 是 `hidewin`，与 eww 无关），
+其余功能（WM、状态栏）不受影响。
+
+## 快捷键与外部程序的对应
+
+改 `config.h` 里的键位时注意，以下依赖**不在** Ubuntu 默认安装里，已替换成本机可用的：
+
+| 键位 | 原绑定 | 现绑定 |
+|---|---|---|
+| `XF86XK_MonBrightnessUp/Down` | `light -A/-U 5`（未装） | `brightnessctl set +5%` / `5%-` |
+| `Super+Ctrl+U`（截全屏） | `maim \| xclip`（maim 未装） | `flameshot full -c` |
+| `Super+U`（截选区） | `maim --select \| xclip` | `flameshot gui` |
+| 中键点状态栏 | `st`（未装） | `wezterm start --always-new-process` |
+
+`config.h` 是本地文件（`.gitignore` 已忽略），但按本仓库约定 `config.def.h` 也要同步改，
+否则 `make clean` 后改动会丢。上表两个文件都已改。
 
 ## 关键约定
 

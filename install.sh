@@ -15,7 +15,6 @@ rm -f ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wallpaper" ~/.config/wallpaper
 ln -snf "$SCRIPT_DIR/rofi_theme" ~/.config/rofi
-ln -snf "$SCRIPT_DIR/dwl" ~/.config/dwl
 
 echo "==> Installing dependencies..."
 # Fix security repo to use TUNA mirror if needed
@@ -54,7 +53,6 @@ run_module rofi_theme
 run_module tmux
 run_module nvim
 run_module nerdfont
-run_module dwl
 
 echo ""
 echo "==> All done!"

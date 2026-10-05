@@ -6,7 +6,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export PATH="$HOME/.local/bin:$PATH"
 
 echo "==> Installing chadwm dependencies..."
-sudo apt-get install -y libimlib2-dev libgtk-3-dev
+# x11-xserver-utils 提供 xsetroot（bar.sh 用它把状态文字塞给 dwm）和 xset（run.sh 调键盘速率）
+# psmisc 提供 killall（config.h 里重载状态栏的绑定用）
+# brightnessctl 被 run.sh 和 config.h 的亮度键使用（上游用的是未打包的 light）
+sudo apt-get install -y libimlib2-dev libgtk-3-dev brightnessctl x11-xserver-utils psmisc
 
 echo "==> Removing old dwm (replaced by chadwm)..."
 sudo rm -f /usr/local/bin/dwm /usr/share/xsessions/dwm.desktop 2>/dev/null || true
@@ -25,24 +28,17 @@ echo "==> Setting up symlinks..."
 rm -rf ~/.config/chadwm
 ln -snf "$SCRIPT_DIR" ~/.config/chadwm
 ln -snf "$SCRIPT_DIR/.Xresources" ~/.Xresources
-chmod +x "$SCRIPT_DIR"/scripts/* "$SCRIPT_DIR"/eww/scripts/*
+chmod +x "$SCRIPT_DIR"/scripts/*
 
 echo "==> Registering session..."
 sudo ln -sf "$SCRIPT_DIR/chadwm.desktop" /usr/share/xsessions/chadwm.desktop 2>/dev/null || \
     echo "Warning: could not write /usr/share/xsessions/chadwm.desktop, register it manually."
 
-# eww is optional: the WM and its status bar work without it (only Super+E needs it).
-# Kept last and non-fatal so a failed Rust build cannot leave the setup half-applied.
-echo "==> Building eww (optional, may take several minutes)..."
-if command -v eww >/dev/null 2>&1; then
-    echo "    eww already installed, skipping."
-elif cargo install --locked --no-default-features --features x11 \
-        --git https://github.com/elkowar/eww --tag v0.6.0; then
-    echo "    eww installed."
-else
-    echo "    Warning: eww build failed. It needs a newer Rust than $(rustc --version 2>/dev/null | awk '{print $2}')."
-    echo "    Try: rustup update stable   (then re-run this script)"
-    echo "    chadwm itself is installed and usable; Super+E will not work until eww is built."
-fi
+# 不装 eww：上游 6 个 release 全部没有预编译产物，Ubuntu 源里也没有，
+# 唯一能从源码编译（cargo install --git https://github.com/elkowar/eww）。
+# 注意 crates.io 上那个同名的 `eww` 是另一个项目（egui backend），不要用。
+# WM 和状态栏都不依赖它，只是状态栏上那个 eww 图标点了没反应
+# （注意 Super+E 是 hidewin，跟 eww 无关）；eww/ 目录保留在仓库里，
+# 想启用时自行编译即可。
 
 echo "chadwm installed."
