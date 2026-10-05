@@ -1,0 +1,26 @@
+# dwm / picom 都是「源码入库、编译产物不入库」的模式：
+# 源码留着是为了在新机器上直接 make，产物是本地生成的，换机器重编译即可。
+#
+# 注：dwm/dwm 和那几个 .o 历史上被误提交过，2026-10 已用
+#     git rm --cached 移出跟踪（文件本身没删，只是不再入库）。
+dwm/dwm
+dwm/*.o
+
+# picom 是从源码编译的 fork（meson/ninja），构建目录不入库
+picom/build/
+
+# 通用编译产物
+*.o
+*.a
+*.so
+*.so.*
+
+# Python
+__pycache__/
+*.py[cod]
+
+# 编辑器 / 系统临时文件
+*.swp
+*.swo
+*~
+.DS_Store

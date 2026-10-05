@@ -57,7 +57,7 @@ alias ll='eza -l --icons'
 alias la='eza -la --icons'
 
 
-export PATH="/home/user/.pixi/bin:$PATH"
+export PATH="$HOME/.pixi/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
@@ -66,6 +66,6 @@ export NVM_DIR="$HOME/.nvm"
 # export ANTHROPIC_BASE_URL="https://www.dmxapi.cn"
 export ANTHROPIC_MODEL=deepseek-v4-flash
 export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
-alias per="cd /home/user/code/eamegrapher_3d/slam_ws/src/perception_local_mapping/"
+alias per='cd $HOME/code/eamegrapher_3d/slam_ws/src/perception_local_mapping/'
 alias n="nvim"
-alias com_per="cd /home/user/code/eamegrapher_3d/slam_ws && pixi shell && ./compile_perception_local_mapping.sh"
+alias com_per='cd $HOME/code/eamegrapher_3d/slam_ws && pixi shell && ./compile_perception_local_mapping.sh'
