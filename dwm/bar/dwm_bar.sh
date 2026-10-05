@@ -10,6 +10,10 @@ THEME="catppuccin"
 # head -1 拿到 "alarm"，后面 cat "alarm/capacity" 全失败，电池永远显示 `--`。
 # （双电池机器有两个匹配时 ls 只打名字，反而看不出问题。）
 BAT=$(ls -d /sys/class/power_supply/BAT* 2>/dev/null | head -1)
+# 同一个 -d 的坑，这次踩的是背光：这台机器只有 intel_backlight 一个，
+# 不带 -d 的话 $BL 会变成 "actual_brightness"（目录里的文件名），后面读
+# $BL/brightness 全失败，亮度永远显示 --。跟 BAT 那行是同一类错误。
+BL=$(ls -d /sys/class/backlight/* 2>/dev/null | head -1)
 prev_total=0
 prev_idle=0
 
@@ -83,6 +87,31 @@ dwm_volume() {
     fi
 }
 
+dwm_brightness() {
+    # 直接读 /sys 而不是 fork 一个 brightnessctl：跟 dwm_battery 一致，也省个进程。
+    # 读的就是 config.h 里 XF86 亮度键写的那个节点（brightnessctl 也是写它），
+    # 所以按亮度键这里会跟着动 —— 两边读同一个文件，不需要额外同步。
+    [ -z "$BL" ] && { printf "^c$grey^^b$grey^ 󰃚 --"; return; }
+    CUR=$(cat "$BL/brightness" 2>/dev/null)
+    MAX=$(cat "$BL/max_brightness" 2>/dev/null)
+    [ -z "$CUR" ] || [ -z "$MAX" ] || [ "$MAX" -eq 0 ] && { printf "^c$grey^^b$grey^ 󰃚 --"; return; }
+
+    # 加 MAX/2 是先四舍五入再除。纯整数除法会截断：这台机器 9323/15360 截断是 60%，
+    # 而 brightnessctl 报 61% —— 差一格，用户对着两个数会以为哪个坏了。
+    PCT=$(( (CUR * 100 + MAX / 2) / MAX ))
+
+    # 三档图标和三档颜色都照抄 dwm_volume 的分法，让状态栏只有一套"低红高绿"的语法。
+    # 图标是 MDI 的 brightness-1 / -3 / -7（U+F00DA / F00DC / F00E0）—— 注意**不是**
+    # 紧挨着的 U+F0C0 那一片，那片是别的图标，靠猜 codepoint 必错。
+    if [ "$PCT" -ge 70 ]; then
+        printf "^c$black^^b$green^ 󰃠 %s%%" "$PCT"
+    elif [ "$PCT" -ge 30 ]; then
+        printf "^c$black^^b$yellow^ 󰃜 %s%%" "$PCT"
+    else
+        printf "^c$black^^b$red^ 󰃚 %s%%" "$PCT"
+    fi
+}
+
 dwm_ip() {
     ip=$(hostname -I 2>/dev/null | awk '{print $1}')
     if [ -z "$ip" ]; then
@@ -104,7 +133,7 @@ cached_ip=$(dwm_ip)
 interval=0
 while true; do
     [ $((interval % 15)) -eq 0 ] && cached_ip=$(dwm_ip)
-    xsetroot -name "$(dwm_wifi)$(dwm_separator)$cached_ip$(dwm_separator)$(dwm_mem)$(dwm_separator)$(dwm_cpu)$(dwm_separator)$(dwm_volume)$(dwm_separator)$(dwm_battery)$(dwm_separator)$(dwm_date)$(dwm_emoji)"
+    xsetroot -name "$(dwm_wifi)$(dwm_separator)$cached_ip$(dwm_separator)$(dwm_mem)$(dwm_separator)$(dwm_cpu)$(dwm_separator)$(dwm_volume)$(dwm_separator)$(dwm_brightness)$(dwm_separator)$(dwm_battery)$(dwm_separator)$(dwm_date)$(dwm_emoji)"
     sleep 2
     interval=$((interval + 1))
 done
