@@ -1,0 +1,7 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=chadwm
+Comment=Dynamic window manager (chadwm)
+Exec=sh -c "dash $HOME/.config/chadwm/scripts/run.sh"
+Icon=chadwm
+Type=Application

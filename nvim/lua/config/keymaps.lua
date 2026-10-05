@@ -16,6 +16,7 @@ vim.keymap.set("i", "<A-'>", "''<Left>", { noremap = true, silent = true })
 vim.keymap.set("i", '<A-">', '""<Left>', { noremap = true, silent = true })
 
 map("n", "jk", "<Esc>", opt)
+map("i", "jk", "<Esc>", opt)
 
 map("n", "<leader>w", ":w<CR>", opt)
 map("n", "ww", ":w<CR>", opt)
@@ -49,3 +50,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { buffer = event.buf, desc = "Prev Diagnostic" })
     end,
 })
+
+vim.keymap.set("n", "<leader>f", function()
+    vim.lsp.buf.format({ async = true })
+end, { desc = "Format buffer" })

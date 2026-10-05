@@ -13,8 +13,13 @@
 ```
 config_files/
 ├── install.sh              # 主安装脚本
-├── dwm/                   # DWM 窗口管理器
-│   └── bar/               #   自定义状态栏脚本
+├── chadwm/                # Chadwm 窗口管理器（dwm 分支，当前使用）
+│   ├── chadwm/            #   源码；config.h 与 config.def.h 均需改，改完重编译
+│   ├── scripts/           #   状态栏 bar.sh + bar_themes/ 配色
+│   ├── eww/               #   eww widget 面板（Super+E）
+│   └── .Xresources        #   软链到 ~/.Xresources
+├── dwm/                   # 旧 DWM（已弃用，仅保留备用）
+├── dwl/                   # Dwl（Wayland，未启用）
 ├── picom/                 # Picom 合成器
 ├── nvim/                  # Neovim 配置
 ├── wezterm/               # WezTerm 终端
@@ -36,7 +41,24 @@ config_files/
 | `wezterm/wezterm.lua` | `~/.config/wezterm/wezterm.lua` |
 | `wallpaper/` | `~/.config/wallpaper` |
 | `rofi_theme/` | `~/.config/rofi` |
-| `dwm/` | `~/.config/dwm` |
+| `chadwm/` | `~/.config/chadwm` |
+| `chadwm/.Xresources` | `~/.Xresources` |
+| `dwl/` | `~/.config/dwl` |
+
+## 主题切换（chadwm）
+
+主题需在 **3 处**同步，否则配色会不一致：
+
+| 位置 | 改什么 | 是否需重编译 |
+|------|--------|-------------|
+| `chadwm/chadwm/config.h` 与 `config.def.h` | `#include "themes/xxx.h"` | 是 |
+| `chadwm/scripts/bar.sh` | `. .../bar_themes/xxx` | 否 |
+| `chadwm/eww/eww.scss` | `@import "scss/themes/xxx.scss"` | 否 |
+
+可选值：catppuccin / dracula / everforest / gruvchad / nord / onedark / tokyonight / tundra
+
+> **注意**：`chadwm/chadwm/Makefile` 的 `clean` 目标会 `rm -f config.h`，而 config.h 规则是
+> `cp config.def.h`。所以**不要用 `make clean`**，否则本地 config.h 会被 config.def.h 覆盖。
 
 ## 关键约定
 

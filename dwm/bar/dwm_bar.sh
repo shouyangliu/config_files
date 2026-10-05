@@ -1,27 +1,20 @@
-#!/bin/bash
+#!/bin/dash
 
-black="#1a1b26"
-grey="#414868"
-blue="#7aa2f7"
-green="#9ece6a"
-red="#f7768e"
-yellow="#e0af68"
-purple="#bb9af7"
-cyan="#7dcfff"
-orange="#ff9e64"
-pink="#bb9af7"
+# Available themes: catppuccin, tokyonight, gruvchad, nord, onedark
+THEME="catppuccin"
+
+. "$(dirname "$0")/themes/$THEME"
+
+BAT=$(ls /sys/class/power_supply/BAT* 2>/dev/null | head -1)
+prev_total=0
+prev_idle=0
 
 dwm_wifi() {
-    ssid=$(iwgetid -r 2>/dev/null)
-    if [ -z "$ssid" ]; then
-        printf "^c$grey^^b$grey^ 睊 --"
+    if [ "$(cat /sys/class/net/wl*/operstate 2>/dev/null)" = "up" ]; then
+        ssid=$(iwgetid -r 2>/dev/null || iw dev 2>/dev/null | awk '/ssid/{print $2; exit}')
+        printf "^c$black^^b$blue^ 󰤨 %s" "$ssid"
     else
-        signal=$(cat /proc/net/wireless 2>/dev/null | awk 'NR==3 {print int($3)}')
-        if [ -z "$signal" ]; then
-            printf "^c$cyan^^b$blue^ 󰤨 %s" "$ssid"
-        else
-            printf "^c$black^^b$cyan^ 󰤨 %s" "$ssid"
-        fi
+        printf "^c$grey^^b$grey^ 󰤭 --"
     fi
 }
 
@@ -30,13 +23,10 @@ dwm_date() {
 }
 
 dwm_battery() {
-    BAT=$(ls /sys/class/power_supply/BAT* 2>/dev/null | head -1)
+    [ -z "$BAT" ] && { printf "^c$grey^^b$grey^ --"; return; }
     CHARGE=$(cat "$BAT/capacity" 2>/dev/null)
     STATUS=$(cat "$BAT/status" 2>/dev/null)
-    if [ -z "$CHARGE" ]; then
-        printf "^c$grey^^b$grey^ --"
-        return
-    fi
+    [ -z "$CHARGE" ] && { printf "^c$grey^^b$grey^ --"; return; }
     if [ "$STATUS" = "Charging" ]; then
         printf "^c$black^^b$green^ 󰂄 %s%%" "$CHARGE"
     elif [ "$CHARGE" -le 20 ]; then
@@ -47,21 +37,23 @@ dwm_battery() {
 }
 
 dwm_cpu() {
-    read cpu a b c previdle rest < /proc/stat
-    prevtotal=$((a+b+c+previdle))
-    sleep 0.5
-    read cpu a b c idle rest < /proc/stat
-    total=$((a+b+c+idle))
-    cpu=$((100*( (total-prevtotal) - (idle-previdle) ) / (total-prevtotal) ))
-    if [ "$cpu" -lt 0 ]; then
-        cpu=0
+    read cpu user nice sys idle iowait irq softirq steal rest < /proc/stat
+    total=$((user+nice+sys+idle+iowait+irq+softirq+steal))
+    dtotal=$((total - prev_total))
+    didle=$((idle - prev_idle))
+    if [ "$dtotal" -ne 0 ]; then
+        pct=$(( (dtotal - didle) * 100 / dtotal ))
+    else
+        pct=0
     fi
-    printf "^c$black^^b$purple^ CPU: %d%%" "$cpu"
+    prev_total=$total
+    prev_idle=$idle
+    printf "^c$black^^b$purple^ CPU: %d%%" "$pct"
 }
 
 dwm_mem() {
-    memfree=$(($(grep -m1 'MemAvailable:' /proc/meminfo | awk '{print $2}') / 1024))
-    memtotal=$(($(grep -m1 'MemTotal:' /proc/meminfo | awk '{print $2}') / 1024))
+    memfree=$(($(awk '/MemAvailable:/ {print $2}' /proc/meminfo) / 1024))
+    memtotal=$(($(awk '/MemTotal:/ {print $2}' /proc/meminfo) / 1024))
     memused=$((memtotal - memfree))
     mempercent=$((memused * 100 / memtotal))
     printf "^c$black^^b$green^ MEM: %dM %d%%" "$memused" "$mempercent"
@@ -84,7 +76,11 @@ dwm_emoji() {
     printf "^c$black^^b$yellow^  "
 }
 
+cached_ip=$(dwm_ip)
+interval=0
 while true; do
-    xsetroot -name "$(dwm_wifi)$(dwm_separator)$(dwm_ip)$(dwm_separator)$(dwm_mem)$(dwm_separator)$(dwm_cpu)$(dwm_separator)$(dwm_battery)$(dwm_separator)$(dwm_date)$(dwm_emoji)"
+    [ $((interval % 15)) -eq 0 ] && cached_ip=$(dwm_ip)
+    xsetroot -name "$(dwm_wifi)$(dwm_separator)$cached_ip$(dwm_separator)$(dwm_mem)$(dwm_separator)$(dwm_cpu)$(dwm_separator)$(dwm_battery)$(dwm_separator)$(dwm_date)$(dwm_emoji)"
     sleep 2
+    interval=$((interval + 1))
 done

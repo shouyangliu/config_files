@@ -55,3 +55,17 @@ PS1='\[\033[1;32m\]\u@\h\[\033[0m\]:\[\033[1;34m\]\w\[\033[1;31m\]$(parse_git_st
 alias ls='eza --icons'
 alias ll='eza -l --icons'
 alias la='eza -la --icons'
+
+
+export PATH="/home/user/.pixi/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# export ANTHROPIC_BASE_URL="https://www.dmxapi.cn"
+export ANTHROPIC_MODEL=deepseek-v4-flash
+export PATH="$HOME/.local/share/nvim/mason/bin:$PATH"
+alias per="cd /home/user/code/eamegrapher_3d/slam_ws/src/perception_local_mapping/"
+alias n="nvim"
+alias com_per="cd /home/user/code/eamegrapher_3d/slam_ws && pixi shell && ./compile_perception_local_mapping.sh"

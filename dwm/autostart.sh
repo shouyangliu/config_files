@@ -1,3 +1,4 @@
 #!/bin/sh
-fcitx5 -d &
+picom --config ~/.picom.conf &
+fcitx5 &
 ~/.config/dwm/bar/dwm_bar.sh &

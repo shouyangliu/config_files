@@ -1739,11 +1739,11 @@ runautostart(void)
         execlp("dbus-launch", "dbus-launch", "--exit-with-session", "fcitx5", "-d", NULL);
         _exit(1);
     }
-    if (fork() == 0) {
-        execlp("picom", "picom", "--daemon", NULL);
-        _exit(1);
-    }
-    system("feh --randomize --bg-fill $HOME/.config/wallpaper/");
+    // if (fork() == 0) {
+    //     execlp("picom", "picom", "--daemon", NULL);
+    //     _exit(1);
+    // }
+    system("feh --randomize --bg-fill $HOME/.config/wallpaper/ &");
     //if (fork() == 0) {
     //    execlp("dwmblocks", "dwmblocks", NULL);
     //    _exit(1);

@@ -7,7 +7,6 @@ export PATH="$HOME/.local/bin:$PATH"
 
 echo "==> Setting up symlinks..."
 mkdir -p ~/.config
-mkdir -p ~/.local/share/dwm
 ln -snf "$SCRIPT_DIR/nvim" ~/.config/nvim
 ln -snf "$SCRIPT_DIR/tmux/.tmux.conf" ~/.tmux.conf
 ln -snf "$SCRIPT_DIR/picom/picom.conf" ~/.picom.conf
@@ -16,11 +15,7 @@ rm -f ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wezterm/wezterm.lua" ~/.config/wezterm/wezterm.lua
 ln -snf "$SCRIPT_DIR/wallpaper" ~/.config/wallpaper
 ln -snf "$SCRIPT_DIR/rofi_theme" ~/.config/rofi
-rm -rf ~/.config/dwm
-ln -snf "$SCRIPT_DIR/dwm" ~/.config/dwm
-ln -snf "$SCRIPT_DIR/dwm/autostart.sh" ~/.local/share/dwm/autostart.sh
-chmod +x "$SCRIPT_DIR/dwm/autostart.sh"
-chmod +x "$SCRIPT_DIR/dwm/bar/dwm_bar.sh"
+ln -snf "$SCRIPT_DIR/dwl" ~/.config/dwl
 
 echo "==> Installing dependencies..."
 # Fix security repo to use TUNA mirror if needed
@@ -37,7 +32,8 @@ sudo apt install -y \
     libxcb-present-dev libxcb-xinerama0-dev libxcb-glx0-dev libpixman-1-dev \
     libdbus-1-dev libconfig-dev libgl1-mesa-dev libpcre2-dev libpcre3-dev libevdev-dev \
     uthash-dev libev-dev libx11-xcb-dev     meson rofi feh ripgrep git curl cargo xdotool \
-    flameshot wireless-tools
+    flameshot wireless-tools libwlroots-dev libwayland-dev libxkbcommon-dev libinput-dev \
+    wayland-protocols
 
 echo "==> Running module installs..."
 run_module() {
@@ -51,13 +47,14 @@ run_module() {
 
 run_module fcitx
 run_module picom
-run_module dwm
+run_module chadwm
 run_module wezterm
 run_module bash
 run_module rofi_theme
 run_module tmux
 run_module nvim
 run_module nerdfont
+run_module dwl
 
 echo ""
 echo "==> All done!"
