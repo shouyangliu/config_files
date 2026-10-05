@@ -37,6 +37,25 @@ else
     printf '%s\n' "$SYNTAX_OUT" | sed 's/^/      /'
 fi
 
+echo "==> Checking theme palettes..."
+# 8 套配色里只有被选中的那套会在实跑里被加载，其余 7 套语法错了平时发现不了，
+# 等哪天切过去才发现就晚了 —— 所以这里一次性全查完，有错就当失败处理。
+PALETTE_BAD=0
+for palette in "$SCRIPT_DIR"/themes/*.lua; do
+    [ -e "$palette" ] || continue
+    if ! PALETTE_OUT=$(awesome -k -c "$palette" 2>&1); then
+        echo "    FAILED — $(basename "$palette"):"
+        printf '%s\n' "$PALETTE_OUT" | sed 's/^/      /'
+        PALETTE_BAD=1
+    fi
+done
+if [ "$PALETTE_BAD" -ne 0 ]; then
+    echo
+    echo "    配色文件有语法错，先修好再重跑。旧窗口管理器未改动。"
+    exit 1
+fi
+echo "    OK"
+
 echo "==> Smoke test in a nested X server..."
 
 if ! command -v Xephyr >/dev/null 2>&1; then
